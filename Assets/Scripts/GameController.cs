@@ -5,12 +5,46 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public GameObject characterPrefab;
+    public Transform characterspawner;
+    GameObject character;
+    public GameObject todelete;
     // Start is called before the first frame update
     void Start()
     {
+        if(characterspawner == null)
+        {
+            Debug.LogError("SPAWNER IS NULL!!!");
+            Application.Quit(1);
+        }
+
+        if (characterPrefab == null)
+        {
+            Debug.LogError("CHARACTER PREFAB IS NULL!!!");
+            Application.Quit(1);
+        }
+
         PrintSOs();
         TestSOs();
+        GameObject.Destroy(todelete);
+        respawnCharacter();
+
+        GameEvents.current.onPlayerDeath += onPlayerDeath;
+
+        DeveloperConsole.instance.RegisterCommand("kill", "Kills the current player dead.", killPlayer);
     }
+
+    void respawnCharacter()
+    {
+        if(character != null)
+        {
+            GameObject.Destroy(character);
+        }
+
+        Debug.Log("Spawning character on " + characterspawner.position);
+        character = Instantiate(characterPrefab, characterspawner.transform);
+    }
+
 
     void PrintSOs()
     {
@@ -101,5 +135,16 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public bool killPlayer(string[] noop)
+    {
+        character.GetComponent<characterControllerScript>().kill();
+        return true;
+    }
+
+    void onPlayerDeath()
+    {
+        respawnCharacter();
     }
 }

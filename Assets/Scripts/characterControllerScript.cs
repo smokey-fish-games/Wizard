@@ -19,9 +19,12 @@ public class characterControllerScript : MonoBehaviour
 
     public LayerMask groundmask;
     private CharacterController cc;
+    Rigidbody rigid;
+    public Collider col;
 
     Vector3 velocity;
     bool isGrounded;
+    bool killed = false;
 
     float xRot = 0f;
 
@@ -34,8 +37,12 @@ public class characterControllerScript : MonoBehaviour
         playerTrans = transform;
         cameraTrans = GetComponentInChildren<Camera>().transform;
         cc = GetComponent<CharacterController>();
+        rigid = GetComponent<Rigidbody>();
+        rigid.useGravity = false;
+        col.enabled = false;
+        cc.enabled = true;
 
-        foreach(Transform t in GetComponentsInChildren<Transform>())
+        foreach (Transform t in GetComponentsInChildren<Transform>())
         {
             if(t.name == "_groundcheck")
             {
@@ -49,19 +56,34 @@ public class characterControllerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        checkpickup();
-        if (holdingObject)
+        if (killed)
         {
-            heldObject.transform.position = objectHoldingPoint.transform.position;
-            heldObject.transform.rotation = objectHoldingPoint.transform.rotation;
-        }
-        if(Input.GetKeyDown("e") && holdingObject)
+            // respawned
+            if (Input.GetMouseButtonDown(0))
+            {
+                GameEvents.current.PlayerDeath();
+            }
+        } else
         {
-            heldObject.GetComponent<objectController>().emptyBottle();
+            //temp
+            if (Input.GetKeyDown("v"))
+            {
+                DeveloperConsole.instance.runCommand("kill", new string[0]);
+                return;
+            }
+            Move();
+            checkpickup();
+            if (holdingObject)
+            {
+                heldObject.transform.position = objectHoldingPoint.transform.position;
+                heldObject.transform.rotation = objectHoldingPoint.transform.rotation;
+            }
+            if (Input.GetKeyDown("e") && holdingObject)
+            {
+                heldObject.GetComponent<objectController>().emptyBottle();
+            }
         }
     }
-
 
     private void Move()
     {
@@ -110,7 +132,6 @@ public class characterControllerScript : MonoBehaviour
             Vector3 origin = new Vector3(0.5f, 0.5f, 0f);
             Ray ray = Camera.main.ViewportPointToRay(origin);
 
-        //    Debug.DrawRay(ray.origin, ray.direction * pickupLength, Color.red, 5f);
             RaycastHit hit;
 
             if (holdingObject)
@@ -123,20 +144,12 @@ public class characterControllerScript : MonoBehaviour
                     }
                     else
                     {
-                        holdingObject = false;
+                        DropObject();
                     }
                 }
                 else
                 {
-                    holdingObject = false;
-                }
-
-                if (!holdingObject)
-                {
-                    // putdown
-                    heldObject.GetComponent<Collider>().enabled = true;
-                    heldObject.GetComponent<Rigidbody>().isKinematic = false;
-                    heldObject = null;
+                    DropObject();
                 }
             }
             else
@@ -155,6 +168,32 @@ public class characterControllerScript : MonoBehaviour
                 }
             }
 
+        }
+    }
+
+    public void kill()
+    {
+        if (!killed)
+        {
+            killed = true;
+            DropObject();
+            rigid.useGravity = true;
+            col.enabled = true;
+            cc.enabled = false;
+            rigid.AddForceAtPosition(new Vector3(-1, -1, -1), new Vector3(1, 1, 1));
+            rigid.MovePosition(Vector3.forward);
+        }
+    }
+
+    void DropObject()
+    {
+        if (holdingObject)
+        {
+            // putdown
+            holdingObject = false;
+            heldObject.GetComponent<Collider>().enabled = true;
+            heldObject.GetComponent<Rigidbody>().isKinematic = false;
+            heldObject = null;
         }
     }
 }
