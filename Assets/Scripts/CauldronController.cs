@@ -13,15 +13,9 @@ public class CauldronController : MonoBehaviour, IItem
         //Set random potion contents
         if (contents == null)
         {
-            SOPotion[] allpos = SOPotion.getAll();
-            int chosen = UnityEngine.Random.Range(0, allpos.Length);
-            setProperty("contents", allpos[chosen].ID.ToString());
-            Debug.Log("Setting potion for " + this.gameObject.name + " to: " + contents.name);
+            contents = SOPotion.getByID(0);
         }
-        else
-        {
-            setProperty("contents", contents.ID.ToString());
-        }
+        setProperty("contents", contents.ID.ToString());
     }
 
     public SOPotion getContents()

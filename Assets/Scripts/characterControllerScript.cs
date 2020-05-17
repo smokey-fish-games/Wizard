@@ -25,6 +25,7 @@ public class characterControllerScript : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
     bool killed = false;
+    bool controlLocked = false;
 
     float xRot = 0f;
 
@@ -51,6 +52,7 @@ public class characterControllerScript : MonoBehaviour
         }
 
         Cursor.lockState = CursorLockMode.Locked;
+        GameEvents.current.switchControlLock += onSwitchControls;
     }
 
     // Update is called once per frame
@@ -63,24 +65,27 @@ public class characterControllerScript : MonoBehaviour
             {
                 GameEvents.current.PlayerDeath();
             }
-        } else
+        } 
+        else
         {
-            //temp
-            if (Input.GetKeyDown("v"))
+            if (!controlLocked)
             {
-                DeveloperConsole.instance.runCommand("kill", new string[0]);
-                return;
+                Move();
+                checkpickup();
+                if (holdingObject)
+                {
+                    heldObject.transform.position = objectHoldingPoint.transform.position;
+                    heldObject.transform.rotation = objectHoldingPoint.transform.rotation;
+                }
+                // TODO change this to interact or unity input system
+                if (Input.GetKeyDown("e") && holdingObject)
+                {
+                    heldObject.GetComponent<potionController>().emptyBottle();
+                }
             }
-            Move();
-            checkpickup();
-            if (holdingObject)
+            else
             {
-                heldObject.transform.position = objectHoldingPoint.transform.position;
-                heldObject.transform.rotation = objectHoldingPoint.transform.rotation;
-            }
-            if (Input.GetKeyDown("e") && holdingObject)
-            {
-                heldObject.GetComponent<potionController>().emptyBottle();
+                cc.Move(new Vector3(0,0,0));
             }
         }
     }
@@ -169,6 +174,11 @@ public class characterControllerScript : MonoBehaviour
             }
 
         }
+    }
+
+    public void onSwitchControls()
+    {
+        controlLocked = !controlLocked;
     }
 
     public void kill()

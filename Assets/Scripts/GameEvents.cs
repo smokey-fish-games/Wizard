@@ -14,6 +14,7 @@ public class GameEvents : MonoBehaviour
     }
 
     public event Action onPlayerDeath;
+    public event Action switchControlLock;
     public void PlayerDeath()
     {
         if (onPlayerDeath != null)
@@ -21,4 +22,13 @@ public class GameEvents : MonoBehaviour
             onPlayerDeath();
         }
     }
+
+    public void SwitchControlLock()
+    {
+        if (switchControlLock != null)
+        {
+            switchControlLock();
+        }
+    }
+
 }

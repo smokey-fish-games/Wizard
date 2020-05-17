@@ -13,16 +13,9 @@ public class potionController : MonoBehaviour, IItem
     {
         if (contents == null)
         {
-            //Set random potion contents
-            SOPotion[] allpos = SOPotion.getAll();
-            int chosen = UnityEngine.Random.Range(0, allpos.Length);
-            setProperty("contents", allpos[chosen].ID.ToString());
-            Debug.Log("Auto setting potion for " + this.gameObject.name + " to: " + contents.name);
+            contents = SOPotion.getByID(0);
         }
-        else
-        {
-            setProperty("contents", contents.ID.ToString());
-        }
+        setProperty("contents", contents.ID.ToString());
     }
 
     public void emptyBottle()

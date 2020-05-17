@@ -59,6 +59,8 @@ public class DeveloperConsole : MonoBehaviour
             devconsole.transform.GetChild(i).gameObject.SetActive(false);
         }
 
+        GameEvents.current.SwitchControlLock();
+        showingConsole = false;
         return true;
     }
 
@@ -72,6 +74,8 @@ public class DeveloperConsole : MonoBehaviour
         devconsoleIn.Select();
         devconsoleIn.ActivateInputField();
 
+        GameEvents.current.SwitchControlLock();
+        showingConsole = true;
         return true;
     }
 
@@ -116,11 +120,7 @@ public class DeveloperConsole : MonoBehaviour
     {
         if(Input.GetKeyDown("tab"))
         {
-            if(showingConsole)
-            {
-                closeConsole(new string[0]);
-            }
-            else 
+            if(!showingConsole)
             {
                 showConsole(new string[0]);
             }
