@@ -80,7 +80,7 @@ public class characterControllerScript : MonoBehaviour
             }
             if (Input.GetKeyDown("e") && holdingObject)
             {
-                heldObject.GetComponent<objectController>().emptyBottle();
+                heldObject.GetComponent<potionController>().emptyBottle();
             }
         }
     }
@@ -140,7 +140,7 @@ public class characterControllerScript : MonoBehaviour
                 {
                     if (hit.collider.gameObject.tag == "cauldron")
                     {
-                        heldObject.GetComponent<objectController>().fillBottle(hit.collider.gameObject.GetComponent<CauldronController>().getContents());
+                        heldObject.GetComponent<potionController>().setProperty("contents", hit.collider.gameObject.GetComponent<CauldronController>().getContents().ID.ToString());
                     }
                     else
                     {

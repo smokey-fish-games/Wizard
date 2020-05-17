@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class CauldronController : MonoBehaviour, IItem
+public class potionController : MonoBehaviour, IItem
 {
     public int uniqueID { get; set; } = 0;
     public Renderer r;
@@ -10,13 +11,13 @@ public class CauldronController : MonoBehaviour, IItem
     // Start is called before the first frame update
     void Start()
     {
-        //Set random potion contents
         if (contents == null)
         {
+            //Set random potion contents
             SOPotion[] allpos = SOPotion.getAll();
             int chosen = UnityEngine.Random.Range(0, allpos.Length);
             setProperty("contents", allpos[chosen].ID.ToString());
-            Debug.Log("Setting potion for " + this.gameObject.name + " to: " + contents.name);
+            Debug.Log("Auto setting potion for " + this.gameObject.name + " to: " + contents.name);
         }
         else
         {
@@ -24,9 +25,14 @@ public class CauldronController : MonoBehaviour, IItem
         }
     }
 
-    public SOPotion getContents()
+    public void emptyBottle()
     {
-        return contents;
+        setProperty("contents", "0");
+    }
+
+    public bool isEmpty()
+    {
+        return (contents.ID == 0);
     }
 
     public void refreshContentGraphic()
@@ -35,21 +41,16 @@ public class CauldronController : MonoBehaviour, IItem
         r.enabled = (contents.ID != 0); // 0 = empty
     }
 
-    public bool isEmpty()
-    {
-        return (contents.ID == 0);
-    }
-
     // Interface functions
     public bool setProperty(string property, string value)
     {
-        if(property.Trim() == "contents")
+        if (property.Trim() == "contents")
         {
             int potionID;
-            if(Int32.TryParse(value.Trim(), out potionID))
+            if (Int32.TryParse(value.Trim(), out potionID))
             {
-                SOPotion newCon =  SOPotion.getByID(potionID);
-                if(newCon == null)
+                SOPotion newCon = SOPotion.getByID(potionID);
+                if (newCon == null)
                 {
                     return false;
                 }
@@ -69,23 +70,13 @@ public class CauldronController : MonoBehaviour, IItem
 
     public bool interact(GameObject with)
     {
-        if (with.GetType() is IItem)
-        {
-            // What are you pushing onto this cauldron?
-            Debug.LogWarning("Interaction for " + this.name + " and " + with.name + " detected!");
-            throw new System.NotImplementedException();
-        }
-        else
-        {
-            //Unknown
-            Debug.LogError("Unknown interaction for " + this.name + " with " + with.name);
-        }
-        return false ;
+
+        throw new System.NotImplementedException();
     }
 
     public bool isPickupable()
     {
-        return false;
+        return true;
     }
 
     public string getPropertyValue(string property)

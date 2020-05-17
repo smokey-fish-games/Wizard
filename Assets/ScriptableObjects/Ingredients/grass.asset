@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dea983e4dff492418f3150eebae5cbe, type: 3}
   m_Name: grass
   m_EditorClassIdentifier: 
-  ID: 1
+  ID: 2
+  ingredientType: 1

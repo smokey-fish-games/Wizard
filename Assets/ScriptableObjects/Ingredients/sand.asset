@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: sand
   m_EditorClassIdentifier: 
   ID: 3
+  ingredientType: 1

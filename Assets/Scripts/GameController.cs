@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
     public Transform characterspawner;
     GameObject character;
     public GameObject todelete;
+
+    ItemController ic;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,8 +25,7 @@ public class GameController : MonoBehaviour
             Debug.LogError("CHARACTER PREFAB IS NULL!!!");
             Application.Quit(1);
         }
-
-        PrintSOs();
+                PrintSOs();
         TestSOs();
         GameObject.Destroy(todelete);
         respawnCharacter();
@@ -32,6 +33,37 @@ public class GameController : MonoBehaviour
         GameEvents.current.onPlayerDeath += onPlayerDeath;
 
         DeveloperConsole.instance.RegisterCommand("kill", "Kills the current player dead.", killPlayer);
+        ic = GetComponent<ItemController>();
+
+        // Spawn 3 cauldrons
+        ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, 2.533089f));
+        {
+            Dictionary<string, string> di = new Dictionary<string, string>();
+            di.Add("contents", "4");
+            // this one has set contents not random
+            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, -0.329f), di);
+        }
+        ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, -3.21f));
+
+        // Spawn 3 bottles
+        ic.SpawnItem(SOItem.getByID(0), new Vector3(7.74599f, 1.264f, 6.338f));
+        {
+            Dictionary<string, string> di = new Dictionary<string, string>();
+            di.Add("contents", "2");
+            // this one has set contents not random
+            ic.SpawnItem(SOItem.getByID(0), new Vector3(8.281f, 1.264f, 6.338f));
+        }
+        ic.SpawnItem(SOItem.getByID(0), new Vector3(8.774f, 1.264f, 6.338f));
+    }
+
+    public Vector3 getCurrentCharPos()
+    {
+        return character.transform.position + character.transform.forward * 3;
+    }
+
+    public Quaternion getCurrentCharRot()
+    {
+        return character.transform.rotation;
     }
 
     void respawnCharacter()
@@ -42,40 +74,41 @@ public class GameController : MonoBehaviour
         }
 
         Debug.Log("Spawning character on " + characterspawner.position);
-        character = Instantiate(characterPrefab, characterspawner.transform);
+        character = Instantiate(characterPrefab, characterspawner.position, new Quaternion(0,0,0,0));
     }
 
 
     void PrintSOs()
     {
-        //Tests
         string printString = "ScriptableObjects:\n--Ingredients--\n";
-        string[] ingreGUID = AssetDatabase.FindAssets("t:SOIngredient");
-        foreach (string s in ingreGUID)
+        SOIngredient[] toListi = SOIngredient.getAll();
+        foreach (SOIngredient s in toListi)
         {
-            string path = AssetDatabase.GUIDToAssetPath(s);
-            SOIngredient soi = (SOIngredient)AssetDatabase.LoadAssetAtPath(path, typeof(SOIngredient));
-            printString += soi.GetDebugString() + " " + path + "\n";
+            printString += s.GetDebugString() + "\n";
         }
 
         printString += "--Effects--\n";
-        string[] effectGUID = AssetDatabase.FindAssets("t:SOEffect");
-        foreach (string s in effectGUID)
+        SOEffect[] toListe = SOEffect.getAll();
+        foreach (SOEffect s in toListe)
         {
-            string path = AssetDatabase.GUIDToAssetPath(s);
-            SOEffect soi = (SOEffect)AssetDatabase.LoadAssetAtPath(path, typeof(SOEffect));
-            printString += soi.GetDebugString() + " " + path + "\n";
+            printString += s.GetDebugString() + "\n";
         }
 
         printString += "--Potions--\n";
-        string[] potionGUIDs = AssetDatabase.FindAssets("t:SOPotion");
-        foreach (string s in potionGUIDs)
+        SOPotion[] toListp = SOPotion.getAll();
+        foreach (SOPotion s in toListp)
         {
-            string path = AssetDatabase.GUIDToAssetPath(s);
-            SOPotion soi = (SOPotion)AssetDatabase.LoadAssetAtPath(path, typeof(SOPotion));
-            printString += soi.GetDebugString() + " " + path + "\n";
+            printString += s.GetDebugString() + "\n";
+        }
+
+        printString += "--Items--\n";
+        SOItem[] toListit = SOItem.getAll();
+        foreach (SOItem s in toListit)
+        {
+            printString += s.GetDebugString() + "\n";
         }
         printString += "End of ScriptableObjects";
+
         Debug.Log(printString);
     }
 
@@ -83,18 +116,17 @@ public class GameController : MonoBehaviour
     {
         //test potions
         {
-            string[] potionGUIDs = AssetDatabase.FindAssets("t:SOPotion");
+            SOPotion[] toCheck = SOPotion.getAll();
             Dictionary<int, string> potionIDs = new Dictionary<int, string>();
-            foreach (string s in potionGUIDs)
+            foreach (SOPotion s in toCheck)
             {
-                SOPotion soi = (SOPotion)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(s), typeof(SOPotion));
-                if (potionIDs.ContainsKey(soi.ID))
+                if (potionIDs.ContainsKey(s.ID))
                 {
-                    Debug.LogError("ERROR: SOPotion " + soi.name + " has the same ID as " + potionIDs[soi.ID] + " = " + soi.ID);
+                    Debug.LogError("ERROR: SOPotion " + s.name + " has the same ID as " + potionIDs[s.ID] + " = " + s.ID);
                 }
                 else
                 {
-                    potionIDs.Add(soi.ID, soi.name);
+                    potionIDs.Add(s.ID, s.name);
                 }
             }
         }
@@ -102,36 +134,51 @@ public class GameController : MonoBehaviour
 
         //test ingredients
         { 
-            string[] ingreGUID = AssetDatabase.FindAssets("t:SOIngredient");
+            SOIngredient[] toCheck = SOIngredient.getAll();
             Dictionary<int, string> ingrIDs = new Dictionary<int, string>();
-            foreach (string s in ingreGUID)
+            foreach (SOIngredient s in toCheck)
             {
-                SOIngredient soi = (SOIngredient)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(s), typeof(SOIngredient));
-                if (ingrIDs.ContainsKey(soi.ID))
+                if (ingrIDs.ContainsKey(s.ID))
                 {
-                    Debug.LogError("ERROR: SOIngredient " + soi.name + " has the same ID as " + ingrIDs[soi.ID] + " = " + soi.ID);
+                    Debug.LogError("ERROR: SOIngredient " + s.name + " has the same ID as " + ingrIDs[s.ID] + " = " + s.ID);
                 }
                 else
                 {
-                    ingrIDs.Add(soi.ID, soi.name);
+                    ingrIDs.Add(s.ID, s.name);
                 }
             }
         }
 
         {
             //test effects
-            string[] effectGUID = AssetDatabase.FindAssets("t:SOEffect");
+            SOEffect[] toCheck = SOEffect.getAll();
             Dictionary<int, string> effectIDs = new Dictionary<int, string>();
-            foreach (string s in effectGUID)
+            foreach (SOEffect s in toCheck)
             {
-                SOEffect soi = (SOEffect)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(s), typeof(SOEffect));
-                if (effectIDs.ContainsKey(soi.ID))
+                if (effectIDs.ContainsKey(s.ID))
                 {
-                    Debug.LogError("ERROR: SOEffect " + soi.name + " has the same ID as " + effectIDs[soi.ID] + " = " + soi.ID);
+                    Debug.LogError("ERROR: SOEffect " + s.name + " has the same ID as " + effectIDs[s.ID] + " = " + s.ID);
                 }
                 else
                 {
-                    effectIDs.Add(soi.ID, soi.name);
+                    effectIDs.Add(s.ID, s.name);
+                }
+            }
+        }
+
+        {
+            //test items
+            SOItem[] toCheck = SOItem.getAll();
+            Dictionary<int, string> itemIDs = new Dictionary<int, string>();
+            foreach (SOItem s in toCheck)
+            {
+                if (itemIDs.ContainsKey(s.ID))
+                {
+                    Debug.LogError("ERROR: SOItem " + s.name + " has the same ID as " + itemIDs[s.ID] + " = " + s.ID);
+                }
+                else
+                {
+                    itemIDs.Add(s.ID, s.name);
                 }
             }
         }

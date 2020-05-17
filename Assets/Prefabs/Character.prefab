@@ -146,7 +146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
-  speed: 12
+  speed: 6
   gravityConstant: -9.8
   groundDistance: 0.4
   jumpHeight: 1
