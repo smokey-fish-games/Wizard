@@ -82,6 +82,11 @@ public class GameController : MonoBehaviour
         character = Instantiate(characterPrefab, characterspawner.position, new Quaternion(0,0,0,0));
     }
 
+    public GameObject GetCharacter()
+    {
+        return character;
+    }
+
 
     void PrintSOs()
     {

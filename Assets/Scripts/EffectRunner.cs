@@ -1,11 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class EffectRunner : MonoBehaviour
 {
+    GameController gc;
     private void Start()
     {
+        gc = GetComponent<GameController>();
+        DeveloperConsole.instance.RegisterCommand("applyeffect",  "[ID] Applies a given effect to the player.", DevCommandAddEffect);
+        DeveloperConsole.instance.RegisterCommand("removeeffect", "[ID] Removes a given effect from the player.", DevCommandRemoveEffect);
+
         //sets up the effects below
         SOEffect[] AllEffects = SOEffect.getAll();
         for(int i = 0; i < AllEffects.Length; i++)
@@ -59,6 +64,80 @@ public class EffectRunner : MonoBehaviour
                     break;
             }
         }
+    }
+
+    bool DevCommandAddEffect(string[] parms)
+    {
+        if(parms.Length != 1)
+        {
+            DeveloperConsole.instance.writeError("Missing Effect ID or too many parameters.");
+            return false;
+        }
+        if(!Int32.TryParse(parms[0].Trim(), out int id))
+        {
+            DeveloperConsole.instance.writeError("Effect ID must be a number.");
+            return false;
+        }
+
+        SOEffect s = SOEffect.getByID(id);
+        if(s==null)
+        {
+            DeveloperConsole.instance.writeError("Unknown Effect ID " + id);
+            return false;
+        }
+        GameObject charo = gc.GetCharacter();
+        if(charo == null)
+        {
+            DeveloperConsole.instance.writeError("Unable to get player.(1)");
+            return false;
+        }
+        IEffectable toEffect = charo.GetComponent<IEffectable>();
+        if(toEffect == null)
+        {
+            DeveloperConsole.instance.writeError("Unable to get player.(2)");
+            return false;
+        }
+
+        s.onEffect(toEffect);
+        DeveloperConsole.instance.writeMessage("Applied effect " + s.printString() + " to player");
+        return true;
+    }
+
+    bool DevCommandRemoveEffect(string[] parms)
+    {
+        if (parms.Length != 1)
+        {
+            DeveloperConsole.instance.writeError("Missing Effect ID or too many parameters.");
+            return false;
+        }
+        if (!Int32.TryParse(parms[0].Trim(), out int id))
+        {
+            DeveloperConsole.instance.writeError("Effect ID must be a number.");
+            return false;
+        }
+
+        SOEffect s = SOEffect.getByID(id);
+        if (s == null)
+        {
+            DeveloperConsole.instance.writeError("Unknown Effect ID " + id);
+            return false;
+        }
+        GameObject charo = gc.GetCharacter();
+        if (charo == null)
+        {
+            DeveloperConsole.instance.writeError("Unable to get player.(1)");
+            return false;
+        }
+        IEffectable toEffect = charo.GetComponent<IEffectable>();
+        if (toEffect == null)
+        {
+            DeveloperConsole.instance.writeError("Unable to get player.(2)");
+            return false;
+        }
+
+        toEffect.RemoveEffect(s);
+        DeveloperConsole.instance.writeMessage("Removed effect " + s.printString() + " from player");
+        return true;
     }
 
     bool applyAffect(SOEffect s, IEffectable target)
