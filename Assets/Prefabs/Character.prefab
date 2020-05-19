@@ -146,10 +146,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 100
-  speed: 6
-  gravityConstant: -9.8
+  Defaultspeed: 6
+  DefaultgravityConstant: -9.81
   groundDistance: 0.4
-  jumpHeight: 1
+  DefaultjumpHeight: 1
   pickupLength: 1.8
   objectHoldingPoint: {fileID: 2650887239669478780}
   groundmask:

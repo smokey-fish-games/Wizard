@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3856640716b60d34b888f2cdb327821c, type: 3}
   m_Name: gloop
   m_EditorClassIdentifier: 
-  ID: 1
-  color: {r: 0.25663045, g: 0.745283, b: 0.36233115, a: 0}
-  onDrinkEffect: {fileID: 11400000, guid: c8d5ab342970f2d47af60e68cc77ed2b, type: 2}
+  ID: 2
+  color: {r: 0.25663045, g: 0.745283, b: 0.36233115, a: 0.5882353}
+  onDrinkEffect: {fileID: 11400000, guid: c264fc3dee2335048ad80f803a833a80, type: 2}
   ingredients:
   - {fileID: 11400000, guid: fc94fdfc61e1db547a91ac5c594f26e5, type: 2}
   - {fileID: 11400000, guid: 268e57aecb868a44196461668b87c0f7, type: 2}

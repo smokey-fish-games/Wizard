@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Effect", menuName = "ScriptableObjects/Potion/Effect")]
@@ -6,6 +7,7 @@ public class SOEffect : ScriptableObject
 {
     private static SOEffect[] allPots = new SOEffect[0];
     public int ID;
+    public Func<IEffectable, bool> onEffect;
 
     public void DebugPrint()
     {

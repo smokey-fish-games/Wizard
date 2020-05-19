@@ -35,87 +35,30 @@ public class GameController : MonoBehaviour
         DeveloperConsole.instance.RegisterCommand("kill", "Kills the current player dead.", killPlayer);
         ic = GetComponent<ItemController>();
 
-        // Spawn 6 cauldrons
+        // Spawn all cauldrons
+        int totalToSpawn = SOPotion.getAll().Length;
+        float offset = -3f;
+        float z = 3f;
+        for(int i = 0; i < totalToSpawn; i++)
         {
             Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "0");
+            di.Add("contents", i.ToString() );
             // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, 3f), di);
-        }
-        
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "1");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, 0f), di);
+            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, z), di);
+            z += offset;
         }
 
+        // Spawn all bottles
+        offset = 0.5f;
+        z = 7f;
+        for (int i = 0; i < totalToSpawn; i++)
         {
             Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "2");
+            di.Add("contents", i.ToString());
             // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, -3f), di);
+            ic.SpawnItem(SOItem.getByID(0), new Vector3(z, 1.264f, 6.338f), di);
+            z += offset;
         }
-
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "3");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, -6f), di);
-        }
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "4");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, -9f), di);
-        }
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "5");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(1), new Vector3(11.54006f, 1.28f, -12f), di);
-        }
-
-
-        // Spawn 6 bottles
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "0");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(0), new Vector3(7f, 1.264f, 6.338f), di);
-        }
-        
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "1");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(0), new Vector3(7.5f, 1.264f, 6.338f), di);
-        }
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "2");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(0), new Vector3(8f, 1.264f, 6.338f), di);
-        }
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "3");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(0), new Vector3(8.5f, 1.264f, 6.338f), di);
-        }
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "4");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(0), new Vector3(9f, 1.264f, 6.338f), di);
-        }
-        {
-            Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", "5");
-            // this one has set contents not random
-            ic.SpawnItem(SOItem.getByID(0), new Vector3(9.5f, 1.264f, 6.338f), di);
-        }
-
     }
 
     public Vector3 getCurrentCharPos()

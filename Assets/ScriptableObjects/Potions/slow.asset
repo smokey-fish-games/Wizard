@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3856640716b60d34b888f2cdb327821c, type: 3}
-  m_Name: water
+  m_Name: slow
   m_EditorClassIdentifier: 
-  ID: 3
-  color: {r: 0.31394622, g: 0.38862062, b: 0.8018868, a: 1}
-  onDrinkEffect: {fileID: 11400000, guid: 7e9f8a09449deb744b4279c25c99059b, type: 2}
-  ingredients:
-  - {fileID: 11400000, guid: fc94fdfc61e1db547a91ac5c594f26e5, type: 2}
+  ID: 11
+  color: {r: 0.48900002, g: 0.48900002, b: 0.48900002, a: 0.84313726}
+  onDrinkEffect: {fileID: 11400000, guid: 6f7b43657a549e84facd66a182618a37, type: 2}
+  ingredients: []

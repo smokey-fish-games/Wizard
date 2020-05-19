@@ -84,6 +84,10 @@ public class CauldronController : MonoBehaviour, IItem
 
     public string getPropertyValue(string property)
     {
-        throw new System.NotImplementedException();
+        if (property.Trim() == "contents")
+        {
+            return contents.ID.ToString();
+        }
+        return "";
     }
 }

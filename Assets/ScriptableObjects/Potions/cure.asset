@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3856640716b60d34b888f2cdb327821c, type: 3}
-  m_Name: water
+  m_Name: cure
   m_EditorClassIdentifier: 
-  ID: 3
-  color: {r: 0.31394622, g: 0.38862062, b: 0.8018868, a: 1}
-  onDrinkEffect: {fileID: 11400000, guid: 7e9f8a09449deb744b4279c25c99059b, type: 2}
-  ingredients:
-  - {fileID: 11400000, guid: fc94fdfc61e1db547a91ac5c594f26e5, type: 2}
+  ID: 5
+  color: {r: 0.8207547, g: 0.71040785, b: 0.18195976, a: 1}
+  onDrinkEffect: {fileID: 11400000, guid: c6ea0c914aea1074396dea7beaacbb98, type: 2}
+  ingredients: []

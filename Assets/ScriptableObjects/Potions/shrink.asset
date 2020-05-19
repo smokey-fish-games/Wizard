@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3856640716b60d34b888f2cdb327821c, type: 3}
-  m_Name: water
+  m_Name: shrink
   m_EditorClassIdentifier: 
-  ID: 3
-  color: {r: 0.31394622, g: 0.38862062, b: 0.8018868, a: 1}
-  onDrinkEffect: {fileID: 11400000, guid: 7e9f8a09449deb744b4279c25c99059b, type: 2}
-  ingredients:
-  - {fileID: 11400000, guid: fc94fdfc61e1db547a91ac5c594f26e5, type: 2}
+  ID: 9
+  color: {r: 0.22316661, g: 0.5013054, b: 0.5566038, a: 0.7607843}
+  onDrinkEffect: {fileID: 11400000, guid: ecebe454438eb4d49a2a420876966822, type: 2}
+  ingredients: []

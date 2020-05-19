@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d38f4182414ea204286b62605beb30ca, type: 3}
-  m_Name: Cauldron
+  m_Name: cauldron
   m_EditorClassIdentifier: 
   ID: 1
   model: {fileID: 6666640058664244956, guid: 48cc5bd4e9ce92a4488bfeaf4c6cbc4d, type: 3}

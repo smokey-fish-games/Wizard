@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3856640716b60d34b888f2cdb327821c, type: 3}
   m_Name: enlarge
   m_EditorClassIdentifier: 
-  ID: 3
-  color: {r: 0.61093676, g: 0.2270826, b: 0.764151, a: 0}
-  onDrinkEffect: {fileID: 11400000, guid: 61d3083881d6ea147bec26086971373a, type: 2}
-  ingredients:
-  - {fileID: 11400000, guid: fc94fdfc61e1db547a91ac5c594f26e5, type: 2}
-  - {fileID: 11400000, guid: adf180a99cfa4ba42af40c4312000fe1, type: 2}
-  - {fileID: 11400000, guid: 268e57aecb868a44196461668b87c0f7, type: 2}
+  ID: 8
+  color: {r: 0.7735849, g: 0.19339623, b: 0.76666796, a: 1}
+  onDrinkEffect: {fileID: 11400000, guid: 5791a91c69f2057479764619b78a5d8a, type: 2}
+  ingredients: []

@@ -18,6 +18,11 @@ public class potionController : MonoBehaviour, IItem
         setProperty("contents", contents.ID.ToString());
     }
 
+    public void Drink(IEffectable target)
+    {
+        contents.onDrinkEffect.onEffect(target);
+        emptyBottle();
+    }
     public void emptyBottle()
     {
         setProperty("contents", "0");
@@ -74,6 +79,10 @@ public class potionController : MonoBehaviour, IItem
 
     public string getPropertyValue(string property)
     {
-        throw new System.NotImplementedException();
+        if (property.Trim() == "contents")
+        {
+            return contents.ID.ToString();
+        }
+        return "";
     }
 }

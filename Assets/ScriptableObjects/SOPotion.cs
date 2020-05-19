@@ -13,6 +13,7 @@ public class SOPotion : ScriptableObject
 
     public SOIngredient[] ingredients;
 
+
     public void DebugPrint()
     {
         Debug.Log(GetDebugString());

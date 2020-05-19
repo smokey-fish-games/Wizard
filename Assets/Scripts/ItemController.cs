@@ -232,6 +232,10 @@ public class ItemController : MonoBehaviour
     public int SpawnItem(SOItem toSpawn, Vector3 pos, Quaternion rot, Dictionary<string,string> startingProperties)
     {
         int rc = 0;
+        if(toSpawn == null)
+        {
+            return rc;
+        }
         GameObject GO = Instantiate(toSpawn.model, pos, rot);
         IItem i = GO.GetComponentInChildren<IItem>();
         if (i != null)

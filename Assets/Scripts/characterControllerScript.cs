@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class characterControllerScript : MonoBehaviour
+public class characterControllerScript : IEffectable
 {
     public float mouseSensitivity = 100f;
-    public float speed = 12f;
-    public float gravityConstant = -9.81f;
+    public float Defaultspeed = 6f;
+    float speed;
+    public float DefaultgravityConstant = -9.81f;
+    float gravityConstant;
     public float groundDistance = 0.4f;
-    public float jumpHeight = 2f;
+    public float DefaultjumpHeight = 1f;
+    float jumpHeight = 2f;
     public float pickupLength = 1.4f;
+    Vector3 DefaultScale;
 
     private Transform playerTrans;
     private Transform cameraTrans;
@@ -35,6 +39,18 @@ public class characterControllerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        MaxHP = 100;
+        MaxMana = 100;
+        MaxStamina = 100;
+        CurrentHP = 100;
+        gravityConstant = DefaultgravityConstant;
+        speed = Defaultspeed;
+        DefaultScale = transform.localScale;
+        jumpHeight = DefaultjumpHeight;
+
+
+        CurrentMana = MaxMana;
+        CurrentStamina = MaxStamina;
         playerTrans = transform;
         cameraTrans = GetComponentInChildren<Camera>().transform;
         cc = GetComponent<CharacterController>();
@@ -60,7 +76,7 @@ public class characterControllerScript : MonoBehaviour
     {
         if (killed)
         {
-            // respawned
+            // respawning
             if (Input.GetMouseButtonDown(0))
             {
                 GameEvents.current.PlayerDeath();
@@ -68,6 +84,10 @@ public class characterControllerScript : MonoBehaviour
         } 
         else
         {
+            if (CurrentHP <= 0)
+            {
+                kill();
+            }
             if (!controlLocked)
             {
                 Move();
@@ -80,7 +100,8 @@ public class characterControllerScript : MonoBehaviour
                 // TODO change this to interact or unity input system
                 if (Input.GetKeyDown("e") && holdingObject)
                 {
-                    heldObject.GetComponent<potionController>().emptyBottle();
+                    potionController p = heldObject.GetComponent<potionController>();
+                    p.Drink(this);
                 }
             }
             else
@@ -205,5 +226,74 @@ public class characterControllerScript : MonoBehaviour
             heldObject.GetComponent<Rigidbody>().isKinematic = false;
             heldObject = null;
         }
+    }
+
+    public override Transform GetTransform()
+    {
+        return transform;
+    }
+
+    public override Renderer GetRenderer()
+    {
+        return GetComponent<Renderer>();
+    }
+
+    public override float GetSpeed()
+    {
+        return speed;
+    }
+
+    public override float GetGravity()
+    {
+        return gravityConstant;
+    }
+
+
+    public override void SetTransform(Transform t)
+    {
+        this.transform.position = t.position;
+        this.transform.localScale = t.localScale;
+        this.transform.rotation = t.rotation;
+    }
+
+    public override void SetRenderer(Renderer r)
+    {
+        Renderer rOld = GetComponent<Renderer>();
+        rOld = r;
+    }
+
+    public override void SetSpeed(float newspeed)
+    {
+        speed = newspeed;
+    }
+
+    public override void SetGravity(float newgravity)
+    {
+        gravityConstant = newgravity;
+    }
+
+    public override Vector3 GetDefaultScale()
+    {
+        return DefaultScale;
+    }
+
+    public override float GetDefaultSpeed()
+    {
+        return Defaultspeed;
+    }
+
+    public override float GetDefaultGravity()
+    {
+        return DefaultgravityConstant;
+    }
+
+    public override float GetDefaultJumpHeight()
+    {
+        return DefaultjumpHeight;
+    }
+
+    public override void SetJumpHeight(float height)
+    {
+        jumpHeight = height;
     }
 }
