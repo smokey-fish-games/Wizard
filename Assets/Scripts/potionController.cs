@@ -1,61 +1,116 @@
 ﻿using System;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class potionController : MonoBehaviour, IItem
+public class potionController : Container
 {
-    public int uniqueID { get; set; } = 0;
     public Renderer r;
-    public SOPotion contents;
+    public List<ContainerFiller> contents = new List<ContainerFiller>();
+
+    public override int uniqueID { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
-        if (contents == null)
-        {
-            contents = SOPotion.getByID(0);
-        }
-        setProperty("contents", contents.ID.ToString());
+        MaxCapacity = 1;
+        canBeUsedInHand = true;
+        canBeUsedInWorld = false;
+        canBePickedUp = true;
+        container = true;
+        refreshContentGraphic();
     }
 
-    public void Drink(IEffectable target)
+    void checkContentsNotNull()
     {
-        contents.onDrinkEffect.onEffect(target);
-        emptyBottle();
-    }
-    public void emptyBottle()
-    {
-        setProperty("contents", "0");
-    }
-
-    public bool isEmpty()
-    {
-        return (contents.ID == 0);
+        contents.RemoveAll(item => item == null);
     }
 
     public void refreshContentGraphic()
     {
-        r.material.SetColor("_potionColor", contents.color);
-        r.enabled = (contents.ID != 0); // 0 = empty
+        checkContentsNotNull();
+        if (!IsEmpty())
+        {
+            r.material.SetColor("_potionColor", contents[0].color);
+        }
+        r.enabled = !IsEmpty();
     }
 
-    // Interface functions
-    public bool setProperty(string property, string value)
+    public override bool EmptyContent(ContainerFiller item)
+    {
+        contents.Remove(item);
+        refreshContentGraphic();
+        return true;
+    }
+
+    public override bool AddToContainer(ContainerFiller item)
+    {
+        if(IsFull())
+        {
+            return false;
+        }
+        if (item.thistype != ContainerFiller.INGREDIENTTYPE.LIQUID)
+        {
+            return false;
+        }
+        contents.Add(item);
+        refreshContentGraphic();
+        return true; 
+    }
+
+    public override ContainerFiller[] GetContents()
+    {
+        return contents.ToArray();
+    }
+
+    public override bool IsEmpty()
+    {
+        return (contents.Count == 0);
+    }
+
+    public override bool UseObject(IEffectable user)
+    {
+        if (!IsEmpty())
+        {
+            contents[0].onConsumeEffect.onEffect(user);
+            EmptyContent(contents[0]);
+        }
+        return true;
+    }
+
+    public override bool PickupObject()
+    {
+        return true;
+    }
+
+    public override bool IsFull()
+    {
+        return (contents.Count == MaxCapacity);
+    }
+
+    void wipeContents()
+    {
+        contents.Clear();
+        refreshContentGraphic();
+    }
+
+    public override bool setProperty(string property, string value)
     {
         if (property.Trim() == "contents")
         {
-            int potionID;
-            if (Int32.TryParse(value.Trim(), out potionID))
+            if (Int32.TryParse(value.Trim(), out int potionID))
             {
-                SOPotion newCon = SOPotion.getByID(potionID);
+                ContainerFiller newCon = ContainerFiller.GetByID(potionID);
                 if (newCon == null)
                 {
                     return false;
                 }
                 else
                 {
-                    contents = newCon;
-                    refreshContentGraphic();
+                    if (!IsEmpty())
+                    {
+                        wipeContents();
+                    }
+                    return AddToContainer(newCon);
                 }
             }
             else
@@ -66,22 +121,11 @@ public class potionController : MonoBehaviour, IItem
         return false;
     }
 
-    public bool interact(GameObject with)
-    {
-
-        throw new System.NotImplementedException();
-    }
-
-    public bool isPickupable()
-    {
-        return true;
-    }
-
-    public string getPropertyValue(string property)
+    public override string getPropertyValue(string property)
     {
         if (property.Trim() == "contents")
         {
-            return contents.ID.ToString();
+            return contents[0].ID.ToString();
         }
         return "";
     }

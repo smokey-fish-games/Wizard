@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d59ad6051854334293145966dd7e78c, type: 3}
+  m_Name: P_gloop
+  m_EditorClassIdentifier: 
+  ID: 2
+  thistype: 0
+  color: {r: 0.2527574, g: 0.36200002, b: 0.11566864, a: 0.7294118}
+  onConsumeEffect: {fileID: 11400000, guid: c264fc3dee2335048ad80f803a833a80, type: 2}

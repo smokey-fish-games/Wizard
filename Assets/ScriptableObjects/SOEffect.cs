@@ -19,14 +19,14 @@ public class SOEffect : ScriptableObject
         return "Effect | ID=" + ID + " Name=" + name;
     }
 
-    public string printString()
+    public string PrintString()
     {
         return "E:" + name + "(" + ID + ")";
     }
 
-    public static SOEffect getByID(int id)
+    public static SOEffect GetByID(int id)
     {
-        SOEffect[] all = getAll();
+        SOEffect[] all = GetAll();
         for (int i = 0; i < all.Length; i++)
         {
             if (all[i].ID == id)
@@ -37,7 +37,7 @@ public class SOEffect : ScriptableObject
         return null;
     }
 
-    public static SOEffect[] getAll()
+    public static SOEffect[] GetAll()
     {
         lock (allPots)
         {

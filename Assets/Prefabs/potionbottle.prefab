@@ -235,4 +235,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad0f03de5e22714ea059671de09fede, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canBeUsedInHand: 1
+  canBeUsedInWorld: 0
+  canBePickedUp: 1
+  container: 1
+  MaxCapacity: 1
+  thisType: 1
   r: {fileID: 2629763829725521783}
+  contents:
+  - {fileID: 0}

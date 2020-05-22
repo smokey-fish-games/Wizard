@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/World/Item")]
@@ -21,14 +19,14 @@ public class SOItem : ScriptableObject
         return "Item | ID=" + ID + " Name=" + name + " Model=" + model.name;
     }
 
-    public string printString()
+    public string PrintString()
     {
         return "I:" + name + "(" + ID + ")";
     }
 
-    public static SOItem getByID(int id)
+    public static SOItem GetByID(int id)
     {
-        SOItem[] all = getAll();
+        SOItem[] all = GetAll();
         for (int i = 0; i < all.Length; i++)
         {
             if (all[i].ID == id)
@@ -39,7 +37,7 @@ public class SOItem : ScriptableObject
         return null;
     }
 
-    public static SOItem[] getAll()
+    public static SOItem[] GetAll()
     {
         lock (allPots)
         {

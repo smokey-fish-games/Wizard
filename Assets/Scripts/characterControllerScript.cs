@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class characterControllerScript : IEffectable
 {
@@ -34,7 +32,7 @@ public class characterControllerScript : IEffectable
     float xRot = 0f;
 
     bool holdingObject = false;
-    public GameObject heldObject;
+    public Interactable heldObject;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +45,6 @@ public class characterControllerScript : IEffectable
         speed = Defaultspeed;
         DefaultScale = transform.localScale;
         jumpHeight = DefaultjumpHeight;
-
 
         CurrentMana = MaxMana;
         CurrentStamina = MaxStamina;
@@ -91,17 +88,11 @@ public class characterControllerScript : IEffectable
             if (!controlLocked)
             {
                 Move();
-                checkpickup();
+                checkInteract();
                 if (holdingObject)
                 {
                     heldObject.transform.position = objectHoldingPoint.transform.position;
                     heldObject.transform.rotation = objectHoldingPoint.transform.rotation;
-                }
-                // TODO change this to interact or unity input system
-                if (Input.GetKeyDown("e") && holdingObject)
-                {
-                    potionController p = heldObject.GetComponent<potionController>();
-                    p.Drink(this);
                 }
             }
             else
@@ -151,49 +142,103 @@ public class characterControllerScript : IEffectable
         cc.Move(velocity * Time.deltaTime);
     }
 
-    void checkpickup()
+    void checkInteract()
     {
-        if (Input.GetMouseButtonDown(0))
+        Vector3 origin = new Vector3(0.5f, 0.5f, 0f);
+        Ray ray = Camera.main.ViewportPointToRay(origin);
+
+        RaycastHit hit;
+
+        // pickup/putdown logic
+        if (Input.GetKeyDown("e"))
         {
-            Vector3 origin = new Vector3(0.5f, 0.5f, 0f);
-            Ray ray = Camera.main.ViewportPointToRay(origin);
-
-            RaycastHit hit;
-
+            // They tried to pickup/putdown something
             if (holdingObject)
             {
-                if(Physics.Raycast(ray, out hit, pickupLength))
+                //YEET
+                DropObject();
+            }
+            else
+            {
+                // Is there something there to pickup?
+                if (Physics.Raycast(ray, out hit, pickupLength))
                 {
-                    if (hit.collider.gameObject.tag == "cauldron")
+                    // yes but is it interactable?
+                    Interactable pickuptarget = hit.collider.gameObject.GetComponent<Interactable>();
+                    if (pickuptarget != null)
                     {
-                        heldObject.GetComponent<potionController>().setProperty("contents", hit.collider.gameObject.GetComponent<CauldronController>().getContents().ID.ToString());
+                        // it is! But can it be picked up?
+                        if(pickuptarget.IsPickupable())
+                        {
+                            // ok let's pick it up
+                            PickUpObject(pickuptarget);
+                        }
                     }
-                    else
+                }
+            }
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            // Is there something there to interact with?
+            if (Physics.Raycast(ray, out hit, pickupLength))
+            {
+                // yes but is it interactable?
+                Interactable pickuptarget = hit.collider.gameObject.GetComponent<Interactable>();
+                if (pickuptarget != null)
+                {
+                    // it is! But is it world usable?
+                    if (pickuptarget.IsWorldUseable())
                     {
-                        DropObject();
+                        // Then use it
+                        pickuptarget.UseObject(this);
+                    }
+                    else if(pickuptarget.IsContainer())
+                    {
+                        if(holdingObject)
+                        {
+                            Container handContainer = heldObject.GetComponent<Container>();
+                            if (handContainer != null)
+                            {
+                                // Ok we need to work out some things
+                                Container targetContainer = pickuptarget.GetComponent<Container>();
+                                if(targetContainer != null)
+                                {
+                                    Container.MoveContents(handContainer, targetContainer);
+                                }
+                                else
+                                {
+                                    //What?
+                                    Debug.LogError("Unable to get container object for " + pickuptarget.name);
+                                }
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    DropObject();
+                    // are we holding a item in our hand that we can use?
+                    if (holdingObject)
+                    {
+                        if (heldObject.IsHandUseable())
+                        {
+                            //go for it
+                            heldObject.UseObject(this);
+                        }
+                    }
                 }
             }
             else
             {
-                if(Physics.Raycast(ray, out hit, pickupLength))
+                // are we holding a item in our hand that we can use?
+                if(holdingObject)
                 {
-               //     Debug.Log("HIT! " + hit.collider.gameObject.name + " Distance = " + hit.distance);
-                    if(hit.collider.gameObject.tag == "holdable")
+                    if(heldObject.IsHandUseable())
                     {
-                        GameObject holdingNow = hit.collider.gameObject;
-                        holdingNow.GetComponent<Collider>().enabled = false;
-                        holdingNow.GetComponent<Rigidbody>().isKinematic = true;
-                        heldObject = holdingNow;
-                        holdingObject = true;
+                        //go for it
+                        heldObject.UseObject(this);
                     }
                 }
             }
-
         }
     }
 
@@ -225,6 +270,17 @@ public class characterControllerScript : IEffectable
             heldObject.GetComponent<Collider>().enabled = true;
             heldObject.GetComponent<Rigidbody>().isKinematic = false;
             heldObject = null;
+        }
+    }
+
+    void PickUpObject(Interactable wantToHold)
+    {
+        if (!holdingObject)
+        {
+            wantToHold.GetComponent<Collider>().enabled = false;
+            wantToHold.GetComponent<Rigidbody>().isKinematic = true;
+            heldObject = wantToHold;
+            holdingObject = true;
         }
     }
 
@@ -295,5 +351,11 @@ public class characterControllerScript : IEffectable
     public override void SetJumpHeight(float height)
     {
         jumpHeight = height;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, pickupLength);
     }
 }

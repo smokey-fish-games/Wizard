@@ -36,7 +36,7 @@ public abstract class IEffectable :  MonoBehaviour
         List<SOEffect> temp = new List<SOEffect>(0);
         for (int i = 0; i < IDs.Length; i++)
         {
-            temp.Add(SOEffect.getByID(IDs[i]));
+            temp.Add(SOEffect.GetByID(IDs[i]));
         }
 
         return temp.ToArray();

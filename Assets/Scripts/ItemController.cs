@@ -89,7 +89,7 @@ public class ItemController : MonoBehaviour
                 }
                 else
                 {
-                    tospawn = SOItem.getByID(temp3);
+                    tospawn = SOItem.GetByID(temp3);
                     if(tospawn == null)
                     {
                         DeveloperConsole.instance.writeError("Unknown ID parameter!");
@@ -236,6 +236,7 @@ public class ItemController : MonoBehaviour
         {
             return rc;
         }
+
         GameObject GO = Instantiate(toSpawn.model, pos, rot);
         IItem i = GO.GetComponentInChildren<IItem>();
         if (i != null)

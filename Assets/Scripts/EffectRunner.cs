@@ -12,7 +12,7 @@ public class EffectRunner : MonoBehaviour
         DeveloperConsole.instance.RegisterCommand("removeeffect", "[ID] Removes a given effect from the player.", DevCommandRemoveEffect);
 
         //sets up the effects below
-        SOEffect[] AllEffects = SOEffect.getAll();
+        SOEffect[] AllEffects = SOEffect.GetAll();
         for(int i = 0; i < AllEffects.Length; i++)
         {
             switch (AllEffects[i].ID)
@@ -79,7 +79,7 @@ public class EffectRunner : MonoBehaviour
             return false;
         }
 
-        SOEffect s = SOEffect.getByID(id);
+        SOEffect s = SOEffect.GetByID(id);
         if(s==null)
         {
             DeveloperConsole.instance.writeError("Unknown Effect ID " + id);
@@ -99,7 +99,7 @@ public class EffectRunner : MonoBehaviour
         }
 
         s.onEffect(toEffect);
-        DeveloperConsole.instance.writeMessage("Applied effect " + s.printString() + " to player");
+        DeveloperConsole.instance.writeMessage("Applied effect " + s.PrintString() + " to player");
         return true;
     }
 
@@ -116,7 +116,7 @@ public class EffectRunner : MonoBehaviour
             return false;
         }
 
-        SOEffect s = SOEffect.getByID(id);
+        SOEffect s = SOEffect.GetByID(id);
         if (s == null)
         {
             DeveloperConsole.instance.writeError("Unknown Effect ID " + id);
@@ -136,7 +136,7 @@ public class EffectRunner : MonoBehaviour
         }
 
         toEffect.RemoveEffect(s);
-        DeveloperConsole.instance.writeMessage("Removed effect " + s.printString() + " from player");
+        DeveloperConsole.instance.writeMessage("Removed effect " + s.PrintString() + " from player");
         return true;
     }
 
@@ -161,7 +161,7 @@ public class EffectRunner : MonoBehaviour
     {
         int damage = 1;
         int time = 10;
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_POISON);
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_POISON);
 
         if (applyAffect(thisEffect, toPoison))
         {
@@ -175,7 +175,7 @@ public class EffectRunner : MonoBehaviour
     {
         int heal = 1;
         int time = 10;
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_REGEN);
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_REGEN);
 
         if (applyAffect(thisEffect, toHeal))
         {
@@ -218,7 +218,7 @@ public class EffectRunner : MonoBehaviour
     public bool HealEntity(IEffectable toHeal)
     {
         int value = 20;
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_HEAL);
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_HEAL);
 
         if (applyAffect(thisEffect, toHeal))
         {
@@ -232,7 +232,7 @@ public class EffectRunner : MonoBehaviour
 
     public bool KillEntity(IEffectable toKill)
     {
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_DEATH);
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_DEATH);
 
         if(applyAffect(thisEffect, toKill))
         {
@@ -246,10 +246,10 @@ public class EffectRunner : MonoBehaviour
 
     public bool CureEntity(IEffectable toCure)
     {
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_CURE);
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_CURE);
         if (applyAffect(thisEffect, toCure))
         {
-            toCure.RemoveEffect(SOEffect.getByID(CONSTANTS.EFFECT_POISON));
+            toCure.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_POISON));
         }
         toCure.RemoveEffect(thisEffect);
         return false;
@@ -261,8 +261,8 @@ public class EffectRunner : MonoBehaviour
         int time = 10;
 
         // Conflicting
-        target.RemoveEffect(SOEffect.getByID(CONSTANTS.EFFECT_SHRINK));
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_ENLARGE);
+        target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_SHRINK));
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_ENLARGE);
 
         if (applyAffect(thisEffect, target))
         {
@@ -278,8 +278,8 @@ public class EffectRunner : MonoBehaviour
         int time = 10;
 
         // Conflicting
-        target.RemoveEffect(SOEffect.getByID(CONSTANTS.EFFECT_ENLARGE));
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_SHRINK);
+        target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_ENLARGE));
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_SHRINK);
 
         if (applyAffect(thisEffect, target))
         {
@@ -321,8 +321,8 @@ public class EffectRunner : MonoBehaviour
         int time = 10;
 
         // Conflicting
-        target.RemoveEffect(SOEffect.getByID(CONSTANTS.EFFECT_SLOW));
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_SPEED);
+        target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_SLOW));
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_SPEED);
 
         if (applyAffect(thisEffect, target))
         {
@@ -337,8 +337,8 @@ public class EffectRunner : MonoBehaviour
         int time = 10;
 
         // Conflicting
-        target.RemoveEffect(SOEffect.getByID(CONSTANTS.EFFECT_SPEED));
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_SLOW);
+        target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_SPEED));
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_SLOW);
 
         if (applyAffect(thisEffect, target))
         {
@@ -376,8 +376,8 @@ public class EffectRunner : MonoBehaviour
         int time = 10;
 
         // Conflicting
-        target.RemoveEffect(SOEffect.getByID(CONSTANTS.EFFECT_HIGH_GRAV));
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_LOW_GRAV);
+        target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_HIGH_GRAV));
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_LOW_GRAV);
 
         if (applyAffect(thisEffect, target))
         {
@@ -392,8 +392,8 @@ public class EffectRunner : MonoBehaviour
         int time = 10;
 
         // Conflicting
-        target.RemoveEffect(SOEffect.getByID(CONSTANTS.EFFECT_LOW_GRAV));
-        SOEffect thisEffect = SOEffect.getByID(CONSTANTS.EFFECT_HIGH_GRAV);
+        target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_LOW_GRAV));
+        SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_HIGH_GRAV);
 
         if (applyAffect(thisEffect, target))
         {

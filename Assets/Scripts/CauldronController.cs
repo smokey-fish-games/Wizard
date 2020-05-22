@@ -1,93 +1,149 @@
 ﻿using System;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class CauldronController : MonoBehaviour, IItem
+public class CauldronController : Container
 {
-    public int uniqueID { get; set; } = 0;
     public Renderer r;
-    public SOPotion contents;
+    public List<ContainerFiller> contents = new List<ContainerFiller>();
+    public override int uniqueID { get; set; }
     // Start is called before the first frame update
     void Start()
     {
-        //Set random potion contents
-        if (contents == null)
-        {
-            contents = SOPotion.getByID(0);
-        }
-        setProperty("contents", contents.ID.ToString());
-    }
-
-    public SOPotion getContents()
-    {
-        return contents;
+        MaxCapacity = 10;
+        canBeUsedInHand = false;
+        canBeUsedInWorld = false;
+        canBePickedUp = false;
+        container = true;
+        refreshContentGraphic();
     }
 
     public void refreshContentGraphic()
     {
-        r.material.SetColor("_potionColor", contents.color);
-        r.enabled = (contents.ID != 0); // 0 = empty
-    }
-
-    public bool isEmpty()
-    {
-        return (contents.ID == 0);
-    }
-
-    // Interface functions
-    public bool setProperty(string property, string value)
-    {
-        if(property.Trim() == "contents")
+        checkContentsNotNull();
+        if (!IsEmpty())
         {
-            int potionID;
-            if(Int32.TryParse(value.Trim(), out potionID))
-            {
-                SOPotion newCon =  SOPotion.getByID(potionID);
-                if(newCon == null)
-                {
-                    return false;
-                }
-                else
-                {
-                    contents = newCon;
-                    refreshContentGraphic();
-                }
-            }
-            else
-            {
-                return false;
-            }
+            r.material.SetColor("_potionColor", contents[0].color);
         }
-        return false;
+        r.enabled = !IsEmpty();
     }
-
-    public bool interact(GameObject with)
+    void checkContentsNotNull()
     {
-        if (with.GetType() is IItem)
-        {
-            // What are you pushing onto this cauldron?
-            Debug.LogWarning("Interaction for " + this.name + " and " + with.name + " detected!");
-            throw new System.NotImplementedException();
-        }
-        else
-        {
-            //Unknown
-            Debug.LogError("Unknown interaction for " + this.name + " with " + with.name);
-        }
-        return false ;
+        contents.RemoveAll(item => item == null);
     }
 
-    public bool isPickupable()
+    public override bool AddToContainer(ContainerFiller item)
     {
-        return false;
+        if (IsFull())
+        {
+            return false;
+        }
+        if(item.thistype != ContainerFiller.INGREDIENTTYPE.LIQUID)
+        {
+            return false;
+        }
+        contents.Add(item);
+        refreshContentGraphic();
+        return true;
     }
 
-    public string getPropertyValue(string property)
+    public override ContainerFiller[] GetContents()
+    {
+        return contents.ToArray();
+    }
+
+    public override bool IsEmpty()
+    {
+        return (contents.Count == 0);
+    }
+
+    public override bool IsFull()
+    {
+        return (contents.Count >= MaxCapacity);
+    }
+
+    void wipeContents()
+    {
+        contents.Clear();
+        refreshContentGraphic();
+    }
+
+    public override string getPropertyValue(string property)
     {
         if (property.Trim() == "contents")
         {
-            return contents.ID.ToString();
+            string toGoback = "";
+            bool first = true;
+            foreach(ContainerFiller c in contents)
+            {
+                if(!first)
+                {
+                    toGoback += ",";
+                    first = true;
+                }
+                toGoback += c.ID.ToString();
+            }
+            return toGoback;
         }
         return "";
+    }
+    public override bool setProperty(string property, string value)
+    {
+        if (property.Trim() == "contents")
+        {
+            //It might be #,#,#,#
+            string[] splitted = value.Trim().Split(',');
+            if (splitted.Length == 0)
+            {
+                DeveloperConsole.instance.writeError("Unable to parse value to set property to!");
+                return false;
+            }
+            bool firstgo = true;
+            for (int i = 0; i < splitted.Length; i++)
+            {
+                if (Int32.TryParse(splitted[i], out int potionID))
+                {
+                    ContainerFiller newCon = ContainerFiller.GetByID(potionID);
+                    if (newCon == null)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (firstgo)
+                        {
+                            wipeContents();
+                            firstgo = false;
+                        }
+                        if (!AddToContainer(newCon))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+    public override bool EmptyContent(ContainerFiller item)
+    {
+        contents.Remove(item);
+        refreshContentGraphic();
+        return true;
+    }
+
+    public override bool UseObject(IEffectable user)
+    {
+        return false;
+    }
+
+    public override bool PickupObject()
+    {
+        return false;
     }
 }
