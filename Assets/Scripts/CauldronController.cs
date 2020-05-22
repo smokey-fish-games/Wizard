@@ -23,7 +23,22 @@ public class CauldronController : Container
         checkContentsNotNull();
         if (!IsEmpty())
         {
-            r.material.SetColor("_potionColor", contents[0].color);
+            Color mix = new Color();
+            bool first = true;
+            foreach(ContainerFiller cooo in contents)
+            {
+                if(first)
+                {
+                    mix = cooo.color;
+                    first = false;
+                }
+                else
+                {
+                    mix += cooo.color;
+                }
+            }
+
+            r.material.SetColor("_potionColor", mix);
         }
         r.enabled = !IsEmpty();
     }
