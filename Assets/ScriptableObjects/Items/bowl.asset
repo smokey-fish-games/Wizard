@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d38f4182414ea204286b62605beb30ca, type: 3}
-  m_Name: bucket
+  m_Name: bowl
   m_EditorClassIdentifier: 
-  ID: 2
-  model: {fileID: 7545017083429490895, guid: 43192f883f1157b42a310e52ea52d2f7, type: 3}
+  ID: 3
+  model: {fileID: 4071648210535998897, guid: a67dca6e63487f847a8af6c3a2272e61, type: 3}

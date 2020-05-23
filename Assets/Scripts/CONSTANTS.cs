@@ -4,6 +4,9 @@
     public const int ITEM_POTIONBOTTLE = 0;
     public const int ITEM_CAULDRON     = 1;
     public const int ITEM_BUCKET       = 2;
+    public const int ITEM_BOWL         = 3;
+    public const int ITEM_DRAIN        = 4;
+    public const int ITEM_BIN          = 5;
 
     // Container Fillers
     public const int INGREDIENT_WATER = 0;

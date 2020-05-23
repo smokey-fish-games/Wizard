@@ -23,7 +23,7 @@ public class GameController : MonoBehaviour
             Debug.LogError("CHARACTER PREFAB IS NULL!!!");
             Application.Quit(1);
         }
-                PrintSOs();
+        PrintSOs();
         TestSOs();
         GameObject.Destroy(todelete);
         respawnCharacter();
@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour
         float z = 3f;
 
         //spawn an empty default one
-        ic.SpawnItem(SOItem.GetByID(1), new Vector3(11.54006f, 1.28f, z));
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_CAULDRON), new Vector3(11.54006f, 1.28f, z));
         z += offset;
 
         for (int i = 0; i < liquids.Length; i++)
@@ -48,7 +48,7 @@ public class GameController : MonoBehaviour
             Dictionary<string, string> di = new Dictionary<string, string>();
             di.Add("contents", liquids[i].ID.ToString());
             // this one has set contents not random
-            ic.SpawnItem(SOItem.GetByID(1), new Vector3(11.54006f, 1.28f, z), di);
+            ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_CAULDRON), new Vector3(11.54006f, 1.28f, z), di);
             z += offset;
         }
 
@@ -57,16 +57,26 @@ public class GameController : MonoBehaviour
         z = 7f;
 
         //spawn an empty default one
-        ic.SpawnItem(SOItem.GetByID(0), new Vector3(z, 1.264f, 6.338f));
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_POTIONBOTTLE), new Vector3(z, 1.264f, 6.338f));
         z += offset;
         for (int i = 0; i < liquids.Length; i++)
         {
             Dictionary<string, string> di = new Dictionary<string, string>();
             di.Add("contents", liquids[i].ID.ToString());
             // this one has set contents not random
-            ic.SpawnItem(SOItem.GetByID(0), new Vector3(z, 1.264f, 6.338f), di);
+            ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_POTIONBOTTLE), new Vector3(z, 1.264f, 6.338f), di);
             z += offset;
         }
+
+        // Spawn a bucket
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BUCKET), new Vector3(4.87f, 0.45f, 3.14f));
+        // Spawn a bowl
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BOWL), new Vector3(4.1f, 0.45f, 3.14f));
+        // Spawn a drain
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_DRAIN), new Vector3(3.181f, 0.2774024f, 3.247f));
+        // Spawn a bin
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BIN), new Vector3(2.297608f, 0.4274023f, 3.312145f));
+
     }
 
     public Vector3 getCurrentCharPos()
