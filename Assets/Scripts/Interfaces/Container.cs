@@ -97,5 +97,6 @@
     private void Start()
     {
         container = true;
+        usedOnWorldObject = true;
     }
 }

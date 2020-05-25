@@ -9,9 +9,9 @@ public class ItemController : MonoBehaviour
 
     GameController gc;
 
-    Dictionary<int, GameObject> trackedObjects = new Dictionary<int, GameObject>();
+    static Dictionary<int, GameObject> trackedObjects = new Dictionary<int, GameObject>();
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         gc = GetComponent<GameController>();
         // register dev commands
@@ -197,7 +197,7 @@ public class ItemController : MonoBehaviour
     }
 
     // destroy items
-    public bool destroyItem(int idtodetroy)
+    public static bool destroyItem(int idtodetroy)
     {
         if(!trackedObjects.ContainsKey(idtodetroy))
         {
@@ -209,7 +209,7 @@ public class ItemController : MonoBehaviour
         return true;
     }
 
-    public void itemDestroyed(int itemgone)
+    public static void itemDestroyed(int itemgone)
     {
         trackedObjects.Remove(itemgone);
     }
@@ -234,7 +234,19 @@ public class ItemController : MonoBehaviour
         int rc = 0;
         if(toSpawn == null)
         {
+            Debug.LogWarning("tospawn null");
             return rc;
+        }
+
+        // one check
+        if(toSpawn.ID == CONSTANTS.ITEM_FREESTAND_INGREDIENT)
+        {
+            if(!startingProperties.ContainsKey(CONSTANTS.CONTENTS_STRING))
+            {
+                Debug.LogError("Cannot create a Freestanding ingredient without contents");
+                DeveloperConsole.instance.writeError("Cannot create a Freestanding ingredient without contents");
+                return rc;
+            }
         }
 
         GameObject GO = Instantiate(toSpawn.model, pos, rot);
@@ -242,12 +254,13 @@ public class ItemController : MonoBehaviour
         if (i != null)
         {
             i.uniqueID = currentID;
-
+            string dictionaryString = "";
             foreach (string s in startingProperties.Keys)
             {
+                dictionaryString += s + "=" + startingProperties[s] + " ";
                 i.setProperty(s, startingProperties[s]);
             }
-            Debug.Log("Spawned Item " + toSpawn.name + " with ID " + i.uniqueID + " at " + pos + " with rotation " + rot + " and properties " + startingProperties);
+            Debug.Log("Spawned Item " + toSpawn.name + " with ID " + i.uniqueID + " at " + pos + " with rotation " + rot + " and properties " + dictionaryString);
             rc = currentID;
         }
         trackedObjects.Add(currentID, GO);

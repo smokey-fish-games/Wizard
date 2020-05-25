@@ -31,11 +31,10 @@ public class characterControllerScript : IEffectable
 
     float xRot = 0f;
 
-    bool holdingObject = false;
     public Interactable heldObject;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         MaxHP = 100;
         MaxMana = 100;
@@ -89,7 +88,7 @@ public class characterControllerScript : IEffectable
             {
                 Move();
                 checkInteract();
-                if (holdingObject)
+                if (heldObject != null)
                 {
                     heldObject.transform.position = objectHoldingPoint.transform.position;
                     heldObject.transform.rotation = objectHoldingPoint.transform.rotation;
@@ -153,7 +152,7 @@ public class characterControllerScript : IEffectable
         if (Input.GetKeyDown("e"))
         {
             // They tried to pickup/putdown something
-            if (holdingObject)
+            if (heldObject != null)
             {
                 //YEET
                 DropObject();
@@ -192,32 +191,39 @@ public class characterControllerScript : IEffectable
                         // Then use it
                         pickuptarget.UseObject(this);
                     }
-                    else if(pickuptarget.IsContainer())
+                    else if(heldObject != null)
                     {
-                        if(holdingObject)
+                        if(heldObject.IsUsedOnWorldObjects())
                         {
-                            Container handContainer = heldObject.GetComponent<Container>();
-                            if (handContainer != null)
-                            {
-                                // Ok we need to work out some things
-                                Container targetContainer = pickuptarget.GetComponent<Container>();
-                                if(targetContainer != null)
-                                {
-                                    Container.MoveContents(handContainer, targetContainer);
-                                }
-                                else
-                                {
-                                    //What?
-                                    Debug.LogError("Unable to get container object for " + pickuptarget.name);
-                                }
-                            }
+                            heldObject.UseObjectOnObject(pickuptarget);
                         }
                     }
+                    //else if(pickuptarget.IsContainer())
+                    //{
+                    //    if(heldObject != null)
+                    //    {
+                    //        Container handContainer = heldObject.GetComponent<Container>();
+                    //        if (handContainer != null)
+                    //        {
+                    //            // Ok we need to work out some things
+                    //            Container targetContainer = pickuptarget.GetComponent<Container>();
+                    //            if(targetContainer != null)
+                    //            {
+                    //                Container.MoveContents(handContainer, targetContainer);
+                    //            }
+                    //            else
+                    //            {
+                    //                //What?
+                    //                Debug.LogError("Unable to get container object for " + pickuptarget.name);
+                    //            }
+                    //        }
+                    //    }
+                    //}
                 }
                 else
                 {
                     // are we holding a item in our hand that we can use?
-                    if (holdingObject)
+                    if (heldObject !=null)
                     {
                         if (heldObject.IsHandUseable())
                         {
@@ -230,7 +236,7 @@ public class characterControllerScript : IEffectable
             else
             {
                 // are we holding a item in our hand that we can use?
-                if(holdingObject)
+                if(heldObject != null)
                 {
                     if(heldObject.IsHandUseable())
                     {
@@ -263,10 +269,9 @@ public class characterControllerScript : IEffectable
 
     void DropObject()
     {
-        if (holdingObject)
+        if (heldObject != null)
         {
             // putdown
-            holdingObject = false;
             heldObject.GetComponent<Collider>().enabled = true;
             heldObject.GetComponent<Rigidbody>().isKinematic = false;
             heldObject = null;
@@ -275,12 +280,11 @@ public class characterControllerScript : IEffectable
 
     void PickUpObject(Interactable wantToHold)
     {
-        if (!holdingObject)
+        if (heldObject == null)
         {
             wantToHold.GetComponent<Collider>().enabled = false;
             wantToHold.GetComponent<Rigidbody>().isKinematic = true;
             heldObject = wantToHold;
-            holdingObject = true;
         }
     }
 

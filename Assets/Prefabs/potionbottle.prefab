@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 760394323175060466}
   - component: {fileID: 6934145282230593336}
   - component: {fileID: 2187398282718649344}
+  - component: {fileID: 7517295191030246665}
   m_Layer: 0
   m_Name: potionbottle
   m_TagString: holdable
@@ -239,7 +240,21 @@ MonoBehaviour:
   canBeUsedInWorld: 0
   canBePickedUp: 1
   container: 1
+  usedOnWorldObject: 1
   MaxCapacity: 1
   thisType: 1
-  r: {fileID: 7965172282878778138}
   contents: []
+  potionTexture: {fileID: 2800000, guid: c3dc4e39bd531434cbdb75b2d07c4928, type: 3}
+--- !u!114 &7517295191030246665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8767553607011873234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0845531194a918e43aabcb77b1e8f2eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 7965172282878778138}

@@ -4,17 +4,30 @@ using UnityEngine;
 
 public class CauldronController : Container
 {
-    public Renderer r;
     public List<ContainerFiller> contents = new List<ContainerFiller>();
+    FillerRenderer fr;
+    public Texture2D potionTexture;
     public override int uniqueID { get; set; }
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        fr = GetComponent<FillerRenderer>();
+        if (fr == null)
+        {
+            Debug.LogError("FILLER RENDERED NULL FOR " + gameObject.name);
+        }
+
+        if(potionTexture == null)
+        {
+            Debug.LogError("POTION TEXTURE NULL FOR " + gameObject.name);
+        }
+
         MaxCapacity = 10;
         canBeUsedInHand = false;
         canBeUsedInWorld = false;
         canBePickedUp = false;
         container = true;
+        usedOnWorldObject = false;
         refreshContentGraphic();
     }
 
@@ -38,9 +51,9 @@ public class CauldronController : Container
                 }
             }
 
-            r.material.SetColor("_potionColor", mix);
+            fr.setContents(contents[0].color, potionTexture);
         }
-        r.enabled = !IsEmpty();
+        fr.showContents(!IsEmpty());
     }
     void checkContentsNotNull()
     {
@@ -49,17 +62,48 @@ public class CauldronController : Container
 
     public override bool AddToContainer(ContainerFiller item)
     {
+        if(item == null)
+        {
+            return false;
+        }
         if (IsFull())
         {
             return false;
         }
-        if(item.thistype != ContainerFiller.INGREDIENTTYPE.LIQUID)
+        switch(item.thistype)
         {
-            return false;
+            case ContainerFiller.INGREDIENTTYPE.LIQUID:
+                contents.Add(item);
+                break;
+            case ContainerFiller.INGREDIENTTYPE.SOLID:
+                if (IContainLiquid())
+                {
+                    // can add a solid if liquid is there already;
+                    contents.Add(item);
+                }
+                else
+                {
+                    return false;
+                }
+                break;
+            default:
+                return false;
         }
-        contents.Add(item);
+
         refreshContentGraphic();
         return true;
+    }
+
+    public bool IContainLiquid()
+    {
+        foreach(ContainerFiller c in contents)
+        {
+            if(c.thistype == ContainerFiller.INGREDIENTTYPE.LIQUID)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public override ContainerFiller[] GetContents()
@@ -85,7 +129,7 @@ public class CauldronController : Container
 
     public override string getPropertyValue(string property)
     {
-        if (property.Trim() == "contents")
+        if (property.Trim() == CONSTANTS.CONTENTS_STRING)
         {
             string toGoback = "";
             bool first = true;
@@ -104,7 +148,7 @@ public class CauldronController : Container
     }
     public override bool setProperty(string property, string value)
     {
-        if (property.Trim() == "contents")
+        if (property.Trim() == CONSTANTS.CONTENTS_STRING)
         {
             //It might be #,#,#,#
             string[] splitted = value.Trim().Split(',');
@@ -159,6 +203,12 @@ public class CauldronController : Container
 
     public override bool PickupObject()
     {
+        return false;
+    }
+
+    public override bool UseObjectOnObject(Interactable target)
+    {
+        // Can't be picked up so shrug
         return false;
     }
 }

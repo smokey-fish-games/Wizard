@@ -5,7 +5,7 @@ public class DrainController : Container
     public ContainerFiller.INGREDIENTTYPE[] acceptsTypes;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (acceptsTypes == null || acceptsTypes.Length == 0)
         {
@@ -16,6 +16,7 @@ public class DrainController : Container
         canBeUsedInWorld = false;
         canBePickedUp = false;
         container = true;
+        usedOnWorldObject = false;
     }
 
 
@@ -80,5 +81,10 @@ public class DrainController : Container
     {
         // Nothing
         return "";
+    }
+
+    public override bool UseObjectOnObject(Interactable target)
+    {
+        return false;
     }
 }

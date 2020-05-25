@@ -4,17 +4,29 @@ using UnityEngine;
 
 public class bucketController : Container
 {
-    public Renderer r;
     public List<ContainerFiller> contents = new List<ContainerFiller>();
+    FillerRenderer fr;
+    public Texture2D potionTexture;
     public override int uniqueID { get; set; }
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        fr = GetComponent<FillerRenderer>();
+        if (fr == null)
+        {
+            Debug.LogError("FILLER RENDERED NULL FOR " + gameObject.name);
+        }
+        if (potionTexture == null)
+        {
+            Debug.LogError("POTION TEXTURE NULL FOR " + gameObject.name);
+        }
+
         MaxCapacity = 100;
         canBeUsedInHand = false;
         canBeUsedInWorld = false;
         canBePickedUp = true;
         container = true;
+        usedOnWorldObject = true;
         refreshContentGraphic();
     }
 
@@ -38,9 +50,9 @@ public class bucketController : Container
                 }
             }
 
-            r.material.SetColor("_potionColor", mix);
+            fr.setContents(contents[0].color, potionTexture);
         }
-        r.enabled = !IsEmpty();
+        fr.showContents(!IsEmpty());
     }
     void checkContentsNotNull()
     {
@@ -85,7 +97,7 @@ public class bucketController : Container
 
     public override string getPropertyValue(string property)
     {
-        if (property.Trim() == "contents")
+        if (property.Trim() == CONSTANTS.CONTENTS_STRING)
         {
             string toGoback = "";
             bool first = true;
@@ -104,7 +116,7 @@ public class bucketController : Container
     }
     public override bool setProperty(string property, string value)
     {
-        if (property.Trim() == "contents")
+        if (property.Trim() == CONSTANTS.CONTENTS_STRING)
         {
             //It might be #,#,#,#
             string[] splitted = value.Trim().Split(',');
@@ -160,5 +172,18 @@ public class bucketController : Container
     public override bool PickupObject()
     {
         return true;
+    }
+
+    public override bool UseObjectOnObject(Interactable target)
+    {
+        if (target == null)
+        {
+            return false;
+        }
+        if (target.IsContainer())
+        {
+            return MoveContents(this, (Container)target);
+        }
+        return false;
     }
 }

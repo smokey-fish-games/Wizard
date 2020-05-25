@@ -1,5 +1,12 @@
 ﻿public class CONSTANTS
 {
+    // DEVELOPER CONSOLE STUFF
+    public const string CONTENTS_STRING = "contents";
+
+    // RENDERER STUFF
+    public const string RENDERER_BASECOLOR_VAR = "_color";
+    public const string RENDERER_TEXTURE2D_VAR = "_texture";
+
     // ITEMS
     public const int ITEM_POTIONBOTTLE = 0;
     public const int ITEM_CAULDRON     = 1;
@@ -7,6 +14,7 @@
     public const int ITEM_BOWL         = 3;
     public const int ITEM_DRAIN        = 4;
     public const int ITEM_BIN          = 5;
+    public const int ITEM_FREESTAND_INGREDIENT = 6;
 
     // Container Fillers
     public const int INGREDIENT_WATER = 0;
@@ -40,8 +48,4 @@
     public const int EFFECT_SLOW         = 9;
     public const int EFFECT_LOW_GRAV  = 10;
     public const int EFFECT_HIGH_GRAV = 11;
-
-    
-        
-
 }

@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e85951e59db6b2943807cb7bba01082e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mouseSensitivity: 100
+  mouseSensitivity: 250
   Defaultspeed: 6
   DefaultgravityConstant: -9.81
   groundDistance: 0.4

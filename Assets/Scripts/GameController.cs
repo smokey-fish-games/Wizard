@@ -10,9 +10,10 @@ public class GameController : MonoBehaviour
 
     ItemController ic;
     // Start is called before the first frame update
-    void Start()
+
+    void Awake()
     {
-        if(characterspawner == null)
+        if (characterspawner == null)
         {
             Debug.LogError("SPAWNER IS NULL!!!");
             Application.Quit(1);
@@ -25,6 +26,9 @@ public class GameController : MonoBehaviour
         }
         PrintSOs();
         TestSOs();
+    }
+    void Start()
+    {
         GameObject.Destroy(todelete);
         respawnCharacter();
 
@@ -34,44 +38,110 @@ public class GameController : MonoBehaviour
         ic = GetComponent<ItemController>();
 
         // Spawn all cauldrons
-        ContainerFiller[] liquids = ContainerFiller.GetAllByType(ContainerFiller.INGREDIENTTYPE.LIQUID);
+        ContainerFiller[] liquidsIngredients = ContainerFiller.GetAllIngredientsByType(ContainerFiller.INGREDIENTTYPE.LIQUID);
+        ContainerFiller[] liquidPotions = ContainerFiller.GetAllPotionsByType(ContainerFiller.INGREDIENTTYPE.LIQUID);
+        ContainerFiller[] solids = ContainerFiller.GetAllByType(ContainerFiller.INGREDIENTTYPE.SOLID);
+        ContainerFiller[] gases = ContainerFiller.GetAllByType(ContainerFiller.INGREDIENTTYPE.GAS);
 
         float offset = -3f;
-        float z = 3f;
+        float z = 0f;
 
+        //Spawn cauldrons of potions
         //spawn an empty default one
         ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_CAULDRON), new Vector3(11.54006f, 1.28f, z));
         z += offset;
 
-        for (int i = 0; i < liquids.Length; i++)
+        for (int i = 0; i < liquidPotions.Length; i++)
         {
             Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", liquids[i].ID.ToString());
+            di.Add(CONSTANTS.CONTENTS_STRING, liquidPotions[i].ID.ToString());
             // this one has set contents not random
             ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_CAULDRON), new Vector3(11.54006f, 1.28f, z), di);
             z += offset;
         }
 
-        // Spawn all bottles
+        // Spawn cauldrons of Ingredients
+        //spawn an empty default one
+        offset = -3f;
+        z = 0f;
+
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_CAULDRON), new Vector3(15.4f, 1.28f, z));
+        z += offset;
+
+        for (int i = 0; i < liquidsIngredients.Length; i++)
+        {
+            Dictionary<string, string> di = new Dictionary<string, string>();
+            di.Add(CONSTANTS.CONTENTS_STRING, liquidsIngredients[i].ID.ToString());
+            // this one has set contents not random
+            ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_CAULDRON), new Vector3(15.4f, 1.28f, z), di);
+            z += offset;
+        }
+
+
+
+        // Spawn all bottles of potions
         offset = 0.5f;
         z = 7f;
 
         //spawn an empty default one
         ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_POTIONBOTTLE), new Vector3(z, 1.264f, 6.338f));
         z += offset;
-        for (int i = 0; i < liquids.Length; i++)
+        for (int i = 0; i < liquidPotions.Length; i++)
         {
             Dictionary<string, string> di = new Dictionary<string, string>();
-            di.Add("contents", liquids[i].ID.ToString());
+            di.Add(CONSTANTS.CONTENTS_STRING, liquidPotions[i].ID.ToString());
             // this one has set contents not random
             ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_POTIONBOTTLE), new Vector3(z, 1.264f, 6.338f), di);
             z += offset;
         }
 
+        // Spawn all bottles of ingredients
+        offset = 0.5f;
+        z = 7f;
+
+        //spawn an empty default one
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_POTIONBOTTLE), new Vector3(z, 1.264f, 9.41f));
+        z += offset;
+        for (int i = 0; i < liquidsIngredients.Length; i++)
+        {
+            Dictionary<string, string> di = new Dictionary<string, string>();
+            di.Add(CONSTANTS.CONTENTS_STRING, liquidsIngredients[i].ID.ToString());
+            // this one has set contents not random
+            ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_POTIONBOTTLE), new Vector3(z, 1.264f, 9.41f), di);
+            z += offset;
+        }
+
+        // Spawn piles of ingredients
+        offset = 0.5f;
+        z = 7.5f;
+        for (int i = 0; i < solids.Length; i++)
+        {
+            Dictionary<string, string> di = new Dictionary<string, string>();
+            di.Add(CONSTANTS.CONTENTS_STRING, solids[i].ID.ToString());
+            // this one has set contents not random
+            ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_FREESTAND_INGREDIENT), new Vector3(z, 1.5f, 17.4901f), di);
+            z += offset;
+        }
+
+        // Spawn Bowls with ingredients
+        // spawn empty one first
+        offset = 0.5f;
+        z = 7.5f;
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BOWL), new Vector3(z, 1.124f, 12.96961f));
+        z += offset;
+        for (int i = 0; i < solids.Length; i++)
+        {
+            Dictionary<string, string> di = new Dictionary<string, string>();
+            di.Add(CONSTANTS.CONTENTS_STRING, solids[i].ID.ToString());
+            // this one has set contents not random
+            ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BOWL), new Vector3(z, 1.124f, 12.96961f), di);
+            z += offset;
+        }
+
+        // Spawn remaining tools
+
         // Spawn a bucket
-        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BUCKET), new Vector3(4.87f, 0.45f, 3.14f));
-        // Spawn a bowl
-        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BOWL), new Vector3(4.1f, 0.45f, 3.14f));
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BUCKET), new Vector3(1.5f, 0.45f, 3.14f));
         // Spawn a drain
         ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_DRAIN), new Vector3(3.181f, 0.2774024f, 3.247f));
         // Spawn a bin
@@ -157,6 +227,23 @@ public class GameController : MonoBehaviour
                 {
                     potionIDs.Add(s.ID, s.name);
                 }
+                // Check for null parameters
+                if(s.color == null)
+                {
+                    Debug.LogError("ERROR: ContainerFiller " + s.name + " has a NULL Color");
+                }
+                if (s.onConsumeEffect == null)
+                {
+                    Debug.LogError("ERROR: ContainerFiller " + s.name + " has a NULL onConsumeEffect");
+                }
+                if (s.onGroundModel == null)
+                {
+                    Debug.LogError("ERROR: ContainerFiller " + s.name + " has a NULL onGroundModel");
+                }
+                if (s.texture == null)
+                {
+                    Debug.LogError("ERROR: ContainerFiller " + s.name + " has a NULL Texture");
+                }
             }
         }
 
@@ -191,6 +278,10 @@ public class GameController : MonoBehaviour
                 {
                     itemIDs.Add(s.ID, s.name);
                 }
+                if (s.model == null)
+                {
+                    Debug.LogError("ERROR: SOItem " + s.name + " has a NULL model");
+                }
             }
         }
 
@@ -207,6 +298,25 @@ public class GameController : MonoBehaviour
                 else
                 {
                     itemIDs.Add(s.ID, s.name);
+                }
+                if (s.result == null)
+                {
+                    Debug.LogError("ERROR: SORecipe " + s.name + " has a NULL result");
+                }
+                if (s.ingredients == null)
+                {
+                    Debug.LogError("ERROR: SORecipe " + s.name + " has a NULL ingredients");
+                }
+                else
+                {
+                    foreach (ContainerFiller c in s.ingredients)
+                    {
+                        if (c==null)
+                        {
+                            Debug.LogError("ERROR: SORecipe " + s.name + " contains a NULL ingredient in it's list.");
+                            break;
+                        }
+                    }
                 }
             }
         }

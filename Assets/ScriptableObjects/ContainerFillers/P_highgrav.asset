@@ -16,3 +16,8 @@ MonoBehaviour:
   thistype: 0
   color: {r: 0.092114635, g: 0.1916628, b: 0.2830189, a: 0.74509805}
   onConsumeEffect: {fileID: 11400000, guid: 7dc8574e167242042bf544fe09eb0595, type: 2}
+  onGroundModel: {fileID: 2771458514469834694, guid: 0b61687501cb25e4d882daf07b3d86d6,
+    type: 3}
+  texture: {fileID: 2800000, guid: c3dc4e39bd531434cbdb75b2d07c4928, type: 3}
+  potion: 1
+  ingredient: 0

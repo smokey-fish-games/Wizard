@@ -5,7 +5,7 @@ using UnityEngine;
 public class EffectRunner : MonoBehaviour
 {
     GameController gc;
-    private void Start()
+    private void Awake()
     {
         gc = GetComponent<GameController>();
         DeveloperConsole.instance.RegisterCommand("applyeffect",  "[ID] Applies a given effect to the player.", DevCommandAddEffect);
