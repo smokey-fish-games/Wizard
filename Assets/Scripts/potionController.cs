@@ -84,7 +84,7 @@ public class potionController : Container
     {
         if (!IsEmpty())
         {
-            contents[0].onConsumeEffect.onEffect(user);
+            contents[0].onConsumeEffect.onEffect(user, contents[0].potency);
             EmptyContent(contents[0]);
         }
         return true;

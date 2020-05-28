@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Item", menuName = "ScriptableObjects/World/Item")]
@@ -49,7 +50,9 @@ public class SOItem : ScriptableObject
                 {
                     allPots[i] = (SOItem)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(potionGUIDs[i]), typeof(SOItem));
                 }
+                allPots = allPots.OrderBy(co => co.ID).ToArray();
             }
+
         }
         return allPots;
     }

@@ -33,6 +33,7 @@
     public const int INGREDIENT_BLOOD = 13;
     public const int INGREDIENT_GRASS = 14;
     public const int INGREDIENT_SAND = 15;
+    public const int INGREDIENT_DRAGON_BLOOD = 16;
 
 
     // EFFECTS
@@ -48,4 +49,9 @@
     public const int EFFECT_SLOW         = 9;
     public const int EFFECT_LOW_GRAV  = 10;
     public const int EFFECT_HIGH_GRAV = 11;
+
+    // RECIPE
+    public const int RECIPE_HEAL = 0;
+    public const int RECIPE_POISON = 1;
+    public const int RECIPE_DRAGONHEAL = 2;
 }

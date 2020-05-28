@@ -307,6 +307,10 @@ public class GameController : MonoBehaviour
                 {
                     Debug.LogError("ERROR: SORecipe " + s.name + " has a NULL ingredients");
                 }
+                else if(s.ingredients.Length < 2)
+                {
+                    Debug.LogError("ERROR: SORecipe " + s.name + " has a less than 2 ingredients");
+                }
                 else
                 {
                     foreach (ContainerFiller c in s.ingredients)

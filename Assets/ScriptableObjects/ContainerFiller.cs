@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class ContainerFiller : ScriptableObject
     public Texture2D texture;
     public bool potion = false;
     public bool ingredient = false;
+
+    public float potency = 0f;
 
     private static ContainerFiller[] allPots = new ContainerFiller[0];
 
@@ -42,6 +45,7 @@ public class ContainerFiller : ScriptableObject
                 {
                     allPots[i] = (ContainerFiller)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(potionGUIDs[i]), typeof(ContainerFiller));
                 }
+                allPots = allPots.OrderBy(co => co.ID).ToArray();
             }
         }
         return allPots;
@@ -127,7 +131,8 @@ public class ContainerFiller : ScriptableObject
 
     public string GetDebugString()
     {
-        return "ContainerFiller | ID=" + ID + " Name=" + name + " INGREDIENTTYPE=" + thistype + " Color =" + color + " OnConsumeEffect=" + onConsumeEffect.PrintString();
+        return "ContainerFiller | ID=" + ID + " Name=" + name + " INGREDIENTTYPE=" + thistype + " Color =" + color + " OnConsumeEffect=" +
+               onConsumeEffect.PrintString() + " POTENCY=" + potency + " POTION=" + potion + " INGREDIENT=" + ingredient;
     }
 
     public string PrintString()

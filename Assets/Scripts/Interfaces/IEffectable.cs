@@ -3,12 +3,12 @@ using UnityEngine;
 public abstract class IEffectable :  MonoBehaviour
 {
     // Basic stats
-    public int CurrentHP { get; set; }
-    public int CurrentMana { get; set; }
-    public int CurrentStamina { get; set; }
-    public int MaxHP { get; set; }
-    public int MaxMana { get; set; }
-    public int MaxStamina { get; set; }
+    public float CurrentHP { get; set; }
+    public float CurrentMana { get; set; }
+    public float CurrentStamina { get; set; }
+    public float MaxHP { get; set; }
+    public float MaxMana { get; set; }
+    public float MaxStamina { get; set; }
 
     // things that need to return something
     public abstract Transform GetTransform();
@@ -61,7 +61,7 @@ public abstract class IEffectable :  MonoBehaviour
         return currentEffects.Contains(e.ID);
     }
 
-    public void Harm(int damage)
+    public void Harm(float damage)
     {
         Debug.Log("hurting for " + damage);
         if (CurrentHP > 0)
@@ -70,7 +70,7 @@ public abstract class IEffectable :  MonoBehaviour
         }
     }
 
-    public void Heal(int heal)
+    public void Heal(float heal)
     {
         Debug.Log("Healing for " + heal);
         CurrentHP += heal;

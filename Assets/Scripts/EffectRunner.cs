@@ -98,7 +98,7 @@ public class EffectRunner : MonoBehaviour
             return false;
         }
 
-        s.onEffect(toEffect);
+        s.onEffect(toEffect,1);
         DeveloperConsole.instance.writeMessage("Applied effect " + s.PrintString() + " to player");
         return true;
     }
@@ -152,41 +152,41 @@ public class EffectRunner : MonoBehaviour
 
     // Effect functions
 
-    public bool Nothing(IEffectable toPoison)
+    public bool Nothing(IEffectable noop1, float noop2)
     {
         return true;
     }
 
-    public bool PoisonEntity(IEffectable toPoison)
+    public bool PoisonEntity(IEffectable toPoison, float potency)
     {
-        int damage = 1;
+        float damage = 1;
         int time = 10;
         SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_POISON);
 
         if (applyAffect(thisEffect, toPoison))
         {
             // Coroutine
-            StartCoroutine(DoT(damage, time, toPoison, thisEffect));
+            StartCoroutine(DoT(damage * potency, time, toPoison , thisEffect));
         }       
 
         return true;
     }
-    public bool HealOverTime(IEffectable toHeal)
+    public bool HealOverTime(IEffectable toHeal, float potency)
     {
-        int heal = 1;
+        float heal = 1;
         int time = 10;
         SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_REGEN);
 
         if (applyAffect(thisEffect, toHeal))
         {
             // Coroutine
-            StartCoroutine(DoT(heal, time, toHeal, thisEffect));
+            StartCoroutine(DoT(heal * potency, time, toHeal, thisEffect));
         }
 
         return true;
     }
 
-    IEnumerator DoT(int ammount, int time, IEffectable target, SOEffect effect)
+    IEnumerator DoT(float ammount, int time, IEffectable target, SOEffect effect)
     {
         if (ammount != 0)
         {
@@ -215,14 +215,14 @@ public class EffectRunner : MonoBehaviour
         }
     }
 
-    public bool HealEntity(IEffectable toHeal)
+    public bool HealEntity(IEffectable toHeal, float potency)
     {
-        int value = 20;
+        float value = 20;
         SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_HEAL);
 
         if (applyAffect(thisEffect, toHeal))
         {
-            toHeal.Heal(value);
+            toHeal.Heal(value * potency);
         }
 
         toHeal.RemoveEffect(thisEffect);
@@ -230,7 +230,7 @@ public class EffectRunner : MonoBehaviour
         return true;
     }
 
-    public bool KillEntity(IEffectable toKill)
+    public bool KillEntity(IEffectable toKill, float noop)
     {
         SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_DEATH);
 
@@ -244,7 +244,7 @@ public class EffectRunner : MonoBehaviour
         return true;
     }
 
-    public bool CureEntity(IEffectable toCure)
+    public bool CureEntity(IEffectable toCure, float noop)
     {
         SOEffect thisEffect = SOEffect.GetByID(CONSTANTS.EFFECT_CURE);
         if (applyAffect(thisEffect, toCure))
@@ -255,10 +255,10 @@ public class EffectRunner : MonoBehaviour
         return false;
     }
 
-    public bool EnlargeEntity(IEffectable target)
+    public bool EnlargeEntity(IEffectable target, float potency)
     {
         float scaleup = 2f;
-        int time = 10;
+        float time = 10;
 
         // Conflicting
         target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_SHRINK));
@@ -266,16 +266,16 @@ public class EffectRunner : MonoBehaviour
 
         if (applyAffect(thisEffect, target))
         {
-            StartCoroutine(ShrinkLarge(scaleup, time, target, thisEffect));
+            StartCoroutine(ShrinkLarge(scaleup, time * potency, target, thisEffect));
         }
 
         return true;
     }
 
-    public bool ShrinkEntity(IEffectable target)
+    public bool ShrinkEntity(IEffectable target, float potency)
     {
         float scaleup = 0.5f;
-        int time = 10;
+        float time = 10;
 
         // Conflicting
         target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_ENLARGE));
@@ -283,17 +283,17 @@ public class EffectRunner : MonoBehaviour
 
         if (applyAffect(thisEffect, target))
         {
-            StartCoroutine(ShrinkLarge(scaleup, time, target, thisEffect));
+            StartCoroutine(ShrinkLarge(scaleup, time * potency, target, thisEffect));
         }
 
         return true;
     }
 
-    IEnumerator ShrinkLarge(float targetScale, int time, IEffectable target, SOEffect effect)
+    IEnumerator ShrinkLarge(float targetScale, float time, IEffectable target, SOEffect effect)
     {
         Vector3 tagetScaleV3 = target.GetDefaultScale() * targetScale;
 
-        for (int i = 0; i < time; i++)
+        for (float i = 0; i < time; i=i+1f)
         {
             if (!target.AffectedBy(effect))
             {
@@ -315,10 +315,10 @@ public class EffectRunner : MonoBehaviour
     }
 
 
-    public bool SpeedEntity(IEffectable target)
+    public bool SpeedEntity(IEffectable target, float potency)
     {
         float scaleup = 2f;
-        int time = 10;
+        float time = 10;
 
         // Conflicting
         target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_SLOW));
@@ -326,15 +326,15 @@ public class EffectRunner : MonoBehaviour
 
         if (applyAffect(thisEffect, target))
         {
-            StartCoroutine(SpeedSlow(scaleup, time, target, thisEffect));
+            StartCoroutine(SpeedSlow(scaleup, time * potency, target, thisEffect));
         }
 
         return true;
     }
-    public bool SlowEntity(IEffectable target)
+    public bool SlowEntity(IEffectable target, float potency)
     {
         float scaleup = 0.5f;
-        int time = 10;
+        float time = 10;
 
         // Conflicting
         target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_SPEED));
@@ -342,17 +342,17 @@ public class EffectRunner : MonoBehaviour
 
         if (applyAffect(thisEffect, target))
         {
-            StartCoroutine(SpeedSlow(scaleup, time, target, thisEffect));
+            StartCoroutine(SpeedSlow(scaleup, time * potency, target, thisEffect));
         }
 
         return true;
     }
 
-    IEnumerator SpeedSlow (float factor, int time, IEffectable target, SOEffect effect)
+    IEnumerator SpeedSlow (float factor, float time, IEffectable target, SOEffect effect)
     {
         float targetSpeed = target.GetDefaultSpeed() * factor;
 
-        for (int i = 0; i < time; i++)
+        for (float i = 0; i < time; i=i+1f)
         {
             if (!target.AffectedBy(effect))
             {
@@ -370,10 +370,10 @@ public class EffectRunner : MonoBehaviour
 
 
 
-    public bool LowGravEntity(IEffectable target)
+    public bool LowGravEntity(IEffectable target, float potency)
     {
         float scaleup = 0.5f;
-        int time = 10;
+        float time = 10;
 
         // Conflicting
         target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_HIGH_GRAV));
@@ -381,15 +381,15 @@ public class EffectRunner : MonoBehaviour
 
         if (applyAffect(thisEffect, target))
         {
-            StartCoroutine(Gravupdown(scaleup, time, target, thisEffect));
+            StartCoroutine(Gravupdown(scaleup, time * potency, target, thisEffect));
         }
 
         return true;
     }
-    public bool HighGravEntity(IEffectable target)
+    public bool HighGravEntity(IEffectable target, float potency)
     {
         float scaleup = 5f;
-        int time = 10;
+        float time = 10;
 
         // Conflicting
         target.RemoveEffect(SOEffect.GetByID(CONSTANTS.EFFECT_LOW_GRAV));
@@ -397,19 +397,19 @@ public class EffectRunner : MonoBehaviour
 
         if (applyAffect(thisEffect, target))
         {
-            StartCoroutine(Gravupdown(scaleup, time, target, thisEffect));
+            StartCoroutine(Gravupdown(scaleup, time * potency, target, thisEffect));
         }
 
         return true;
     }
 
 
-    IEnumerator Gravupdown(float factor, int time, IEffectable target, SOEffect effect)
+    IEnumerator Gravupdown(float factor, float time, IEffectable target, SOEffect effect)
     {
         float targetGrav = target.GetDefaultGravity() * factor;
         float jumpHeight = target.GetDefaultJumpHeight() / factor;
 
-        for (int i = 0; i < time; i++)
+        for (float i = 0; i < time; i=i+1f)
         {
             if (!target.AffectedBy(effect))
             {

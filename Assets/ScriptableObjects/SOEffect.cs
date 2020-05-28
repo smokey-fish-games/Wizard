@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ public class SOEffect : ScriptableObject
 {
     private static SOEffect[] allPots = new SOEffect[0];
     public int ID;
-    public Func<IEffectable, bool> onEffect;
+    public Func<IEffectable, float, bool> onEffect;
 
     public void DebugPrint()
     {
@@ -49,7 +50,9 @@ public class SOEffect : ScriptableObject
                 {
                     allPots[i] = (SOEffect)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(potionGUIDs[i]), typeof(SOEffect));
                 }
+                allPots = allPots.OrderBy(co => co.ID).ToArray();
             }
+            
         }
 
         return allPots;
