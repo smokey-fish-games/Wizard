@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d59ad6051854334293145966dd7e78c, type: 3}
+  m_Name: P_enlarge
+  m_EditorClassIdentifier: 
+  ID: 7
+  thistype: 0
+  color: {r: 0.7924528, g: 0.22054112, b: 0.7827886, a: 0.77254903}
+  onConsumeEffect: {fileID: 11400000, guid: 5791a91c69f2057479764619b78a5d8a, type: 2}
+  onGroundModel: {fileID: 2771458514469834694, guid: 0b61687501cb25e4d882daf07b3d86d6,
+    type: 3}
+  texture: {fileID: 2800000, guid: c3dc4e39bd531434cbdb75b2d07c4928, type: 3}
+  potion: 1
+  ingredient: 0
+  dryable: 0
+  onDryProcess: {fileID: 0}
+  onGrindProcess: {fileID: 0}
+  potency: 1

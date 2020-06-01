@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 0
   model: {fileID: 8767553607011873234, guid: aa80d91c0c122564daecd3de6a2617ed, type: 3}
+  canBePickedUp: 1
+  container: 1

@@ -7,8 +7,6 @@ public class FreeStandingIngredientController : Interactable
     FillerRenderer fr;
     ContainerFiller thisCF;
 
-    public override int uniqueID { get; set; }
-
     public override bool setProperty(string property, string value)
     {
         if (property.Trim() == CONSTANTS.CONTENTS_STRING)

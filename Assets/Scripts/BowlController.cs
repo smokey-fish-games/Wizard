@@ -7,10 +7,6 @@ public class BowlController : Container
     public List<ContainerFiller> contents = new List<ContainerFiller>();
     FillerRenderer fr;
 
-
-    public override int uniqueID { get; set; }
-
-
     // Start is called before the first frame update
     void Awake()
     {

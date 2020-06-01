@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 public class DrainController : Container
 {
-    public override int uniqueID { get; set; }
     public ContainerFiller.INGREDIENTTYPE[] acceptsTypes;
 
-    // Start is called before the first frame update
     void Awake()
     {
         if (acceptsTypes == null || acceptsTypes.Length == 0)

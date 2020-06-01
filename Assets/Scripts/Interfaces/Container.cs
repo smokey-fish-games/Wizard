@@ -1,6 +1,6 @@
 ﻿public abstract class Container : Interactable
 {
-    public enum ContainerTypes { BUCKET, BOTTLE, CAULDRON, BOWL, DRAIN, BIN };
+    public enum ContainerTypes { BUCKET, BOTTLE, CAULDRON, BOWL, DRAIN, BIN, INGREDIENTPROCESSOR };
     public int MaxCapacity;
 
     public ContainerTypes thisType;

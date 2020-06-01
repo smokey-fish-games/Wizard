@@ -139,13 +139,16 @@ public class GameController : MonoBehaviour
         }
 
         // Spawn remaining tools
-
+        //Spawn a pestle and mortar
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_PANDM), new Vector3(-8.778f, 1.05306f, -4.482306f));
         // Spawn a bucket
-        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BUCKET), new Vector3(1.5f, 0.45f, 3.14f));
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BUCKET), new Vector3(-8.778f, 1.05306f, -5.109999f));
         // Spawn a drain
-        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_DRAIN), new Vector3(3.181f, 0.2774024f, 3.247f));
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_DRAIN), new Vector3(-8.778f, 0.276f, -2.195f));
         // Spawn a bin
-        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BIN), new Vector3(2.297608f, 0.4274023f, 3.312145f));
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_BIN), new Vector3(-8.778f, 0.409f, -0.855f));
+        // Spawn a pot
+        ic.SpawnItem(SOItem.GetByID(CONSTANTS.ITEM_POT), new Vector3(-8.778f, 1.05306f, -6.109999f));
 
     }
 

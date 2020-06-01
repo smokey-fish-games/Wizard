@@ -15,6 +15,8 @@
     public const int ITEM_DRAIN        = 4;
     public const int ITEM_BIN          = 5;
     public const int ITEM_FREESTAND_INGREDIENT = 6;
+    public const int ITEM_PANDM = 7;
+    public const int ITEM_POT = 8;
 
     // Container Fillers
     public const int INGREDIENT_WATER = 0;

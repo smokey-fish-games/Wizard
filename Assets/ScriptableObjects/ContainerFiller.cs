@@ -15,6 +15,9 @@ public class ContainerFiller : ScriptableObject
     public Texture2D texture;
     public bool potion = false;
     public bool ingredient = false;
+    public bool dryable = false;
+    public ContainerFiller onDryProcess;
+    public ContainerFiller onGrindProcess;
 
     public float potency = 0f;
 
@@ -132,7 +135,9 @@ public class ContainerFiller : ScriptableObject
     public string GetDebugString()
     {
         return "ContainerFiller | ID=" + ID + " Name=" + name + " INGREDIENTTYPE=" + thistype + " Color =" + color + " OnConsumeEffect=" +
-               onConsumeEffect.PrintString() + " POTENCY=" + potency + " POTION=" + potion + " INGREDIENT=" + ingredient;
+               onConsumeEffect.PrintString() + " POTENCY=" + potency + " POTION=" + potion + " INGREDIENT=" + ingredient + 
+               " Gridable=" + (!isGrindable() ? "false" : string.Format("true({0}[{1}])", onGrindProcess.name, onGrindProcess.ID)) + 
+               " Dryable=" + (!isDryable() ? "false" : string.Format("true({0}[{1}])", onDryProcess.name, onDryProcess.ID));
     }
 
     public string PrintString()
@@ -148,6 +153,15 @@ public class ContainerFiller : ScriptableObject
     public bool isIngredient()
     {
         return ingredient;
+    }
+
+    public bool isGrindable()
+    {
+        return onGrindProcess != null;
+    }
+    public bool isDryable()
+    {
+        return onDryProcess != null;
     }
 }
 

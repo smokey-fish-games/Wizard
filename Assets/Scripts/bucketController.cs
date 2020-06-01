@@ -7,7 +7,6 @@ public class bucketController : Container
     public List<ContainerFiller> contents = new List<ContainerFiller>();
     FillerRenderer fr;
     public Texture2D potionTexture;
-    public override int uniqueID { get; set; }
     // Start is called before the first frame update
     void Awake()
     {

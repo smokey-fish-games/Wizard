@@ -11,7 +11,6 @@ public class CauldronController : Container
 
     FillerRenderer fr;
     public Texture2D potionTexture;
-    public override int uniqueID { get; set; }
     // Start is called before the first frame update
     void Awake()
     {

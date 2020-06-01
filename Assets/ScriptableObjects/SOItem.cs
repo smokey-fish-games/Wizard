@@ -8,6 +8,8 @@ public class SOItem : ScriptableObject
     private static SOItem[] allPots = new SOItem[0];
     public int ID;
     public GameObject model;
+    public bool canBePickedUp = false;
+    public bool container = false;
 
 
     public void DebugPrint()
@@ -17,7 +19,7 @@ public class SOItem : ScriptableObject
 
     public string GetDebugString()
     {
-        return "Item | ID=" + ID + " Name=" + name + " Model=" + model.name;
+        return "Item | ID=" + ID + " Name=" + name + " Model=" + model.name + " Pickupable=" + canBePickedUp + " Container=" + container;
     }
 
     public string PrintString()
