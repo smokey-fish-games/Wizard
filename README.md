@@ -1,4 +1,7 @@
-# This is the repo for the Wizard game prototype
+# This is the Archived repo for the Wizard game prototype
+
+I tried making a wizard base game but lost inspiration/motivation for it. 
+I may pick it up in the future but for now i'll archive it.
 
 * Lead: Rob
 * [Trello Board](https://trello.com/b/jklITlQw/wizard-game)
